@@ -1,4 +1,4 @@
-import "../styles/loginPageStyles.css";
+import "../styles/paginaAutenticacao.css";
 import { Link } from "react-router-dom";
 import loginAccount from "../adapters/loginAccount";
 import { useState } from "react";
@@ -11,7 +11,7 @@ const Login = () => {
     email: email,
     password: password,
   };
-  
+
   async function handleLogin(event) {
     event.preventDefault();
     await loginAccount(user);

@@ -1,4 +1,4 @@
-import "../styles/loginPageStyles.css";
+import "../styles/paginaAutenticacao.css";
 import newUser from "../adapters/criarConta";
 import { Link } from "react-router-dom";
 import { useState } from "react";
