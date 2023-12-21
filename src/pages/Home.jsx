@@ -6,6 +6,9 @@ const Home = () => {
   return (
     <>
       <Header />
+      <div className="containerFilmeDestaque">
+        <img src="../../public/img/capa-zootopia.png" />
+      </div>
       <div className="main">
         <h1>Movies</h1>
         <Cards />
