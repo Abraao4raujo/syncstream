@@ -1,0 +1,114 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Roboto&display=swap");
+
+.modal-container {
+  display: flex;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 30%;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  flex-direction: column;
+}
+
+.modal-title {
+  font-size: 28px;
+  margin: 15px 0px;
+  color: #0056b3;
+}
+
+form {
+  width: 90%;
+}
+
+.modal-title,
+p,
+h2 {
+  font-family: "Roboto", sans-serif;
+}
+
+.title_input {
+  font-size: 18px;
+  margin-right: auto;
+}
+
+.modal-input {
+  border: none;
+  border-bottom: 2px solid #007bff;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 16px;
+  outline: none;
+  transition: border-bottom-color 0.3s ease;
+  margin-bottom: 35px;
+  width: 100%;
+}
+
+.modal-input:focus {
+  border-bottom-color: #ff4500;
+}
+
+.modal-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  outline: none;
+  transition: background-color 0.3s ease;
+}
+
+.modal-button:hover {
+  background-color: #0056b3;
+}
+
+.modal-logo {
+  width: 30%;
+  margin-top: auto;
+  opacity: 50%;
+}
+
+.checkbox-login {
+  display: flex;
+  font-size: 15px;
+  margin-right: auto;
+}
+
+.link {
+  text-decoration: none;
+  color: blue;
+  font-family: "Roboto", sans-serif;
+  font-size: 15px;
+  margin-left: 0px;
+  letter-spacing: 1px;
+}
+
+.link:hover {
+  color: #044891;
+}
+
+.options-login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.checkbox-keep-connected {
+  padding-bottom: 30px;
+}
+
+.label-options {
+  padding-bottom: 10px;
+}
+
+body {
+  background-image: url("../../public/img/capas-de-filmes.png");
+  background-size: cover;
+  background-attachment: fixed;
+}

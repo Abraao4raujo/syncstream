@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Roboto&display=swap');
+
+.card{
+  min-width: 260px;
+  height: auto;
+  margin-left: 30px;
+  display: flex;
+  position: relative;
+  display: inline-block;
+}
+
+.poster {
+  max-width: 100%;
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+.play{
+  position: absolute;
+  top: 10%;
+  left: 5%;
+  transform: translate(-50%, -50%);
+  color: #ffffff;
+  font-size: 50px;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.inf-movie:hover .poster,
+.play-container:hover .poster {
+  transform: scale(1.1);
+  opacity: 0.1;
+}
+
+.inf-movie {
+  position: relative;
+  overflow: hidden;
+}
+
+.inf-movie:hover label{
+  opacity: 1;
+  transform: translateY(-50%);
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.inf-movie:hover .play{
+  opacity: 1;
+    transform: translateY(-50%);
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.title-movie, .overview-movie{
+  position: absolute;
+  color: #ffffff;
+  font-family: 'Roboto', sans-serif;
+  opacity: 0;
+}
+
+.title-movie{
+  top: 10%;
+  left: 38%;
+  font-size: 18px;
+
+}
+
+.overview-movie{
+  top: 55%;
+  left: 5%;
+  font-size: 12px;
+  text-align: left;
+}
