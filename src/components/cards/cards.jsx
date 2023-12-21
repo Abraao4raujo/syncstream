@@ -1,4 +1,3 @@
-// import { useState } from "react";
 import Card from "../card/card.jsx";
 import "../../styles/cards.css";
 import useFetch from "../../adapters/useFetch.jsx";

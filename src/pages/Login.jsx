@@ -11,6 +11,7 @@ const Login = () => {
     email: email,
     password: password,
   };
+  
   async function handleLogin(event) {
     event.preventDefault();
     await loginAccount(user);

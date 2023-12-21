@@ -1,5 +1,5 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebaseConfig";
+import { auth } from "./firebaseConfig";
 
 const newUser = async ({ email, password }) => {
   try {
@@ -9,7 +9,7 @@ const newUser = async ({ email, password }) => {
       password
     );
     console.log(userCredential);
-    alert("Usuario cadastrado!");
+    window.location.href = "/home";
   } catch (error) {
     console.log(error);
   }
