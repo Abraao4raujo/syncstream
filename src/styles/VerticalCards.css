@@ -1,0 +1,12 @@
+.grid-cards {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  gap: 5px;
+  align-items: center;
+  background-color: #22222273;
+}
+
+.grid-cards > .card{
+  width: 250px;
+}
