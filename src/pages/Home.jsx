@@ -1,4 +1,3 @@
-import "../styles/home.css";
 import { Header } from "../components/header/header";
 import "../styles/main.css";
 import Cards from "../components/cards/cards";
