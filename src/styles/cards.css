@@ -1,20 +1,33 @@
-.cards{
+.cards {
   margin-top: 10px;
-  height: 430px;
   display: flex;
   align-items: center;
   overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  -webkit-scrollbar: none;
   overflow-y: hidden;
+}
+
+.container-cards {
   background-color: #22222273;
+}
+
+.movie-list {
+  color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  list-style: none;
+  font-size: 1.8rem;
+}
+
+.movie-list > li {
+  padding: 0px 8px;
+  cursor: pointer;
 }
 
 .cards::-webkit-scrollbar {
   background-color: transparent;
   width: 12px;
-  height: 10px
+  height: 10px;
 }
 
 .cards::-webkit-scrollbar-thumb {
@@ -29,7 +42,3 @@
 .cards::-webkit-scrollbar-track {
   background-color: transparent;
 }
-
-/* display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-    align-items: center; */
