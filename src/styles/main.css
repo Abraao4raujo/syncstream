@@ -27,3 +27,68 @@
   color: white;
   margin-left: 20px;
 }
+
+.modalContainer {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  height: 50vh;
+  background: linear-gradient(#222, #222);
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  align-items: center;
+}
+
+.headerModal > h2 {
+  font-size: 1.5rem;
+  font-family: "Bebas Neue", sans-serif;
+  color: white;
+  margin: 15px 30px;
+}
+
+.headerModal {
+  margin-bottom: 30px;
+}
+
+.inputsName,
+.inputsPassword {
+  display: flex;
+  flex-direction: column;
+  color: white;
+}
+
+#mainPassword,
+#mainNome {
+  margin-bottom: 10px;
+  padding: 8px;
+  border-radius: 20px;
+  background-color: #d9d9d9;
+}
+
+.footerModal > button {
+  padding: 8px;
+  border-radius: 20px;
+  background-color: #d9d9d9;
+  color: black;
+  border: none;
+  width: 100px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.footerModal {
+  display: flex;
+  justify-content: center;
+}
+
+.mainModal {
+  width: 300px;
+}
+
+.footerModal > button,
+.mainModal {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 1rem;
+}
