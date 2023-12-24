@@ -23,3 +23,11 @@
   padding: 0px 8px;
   cursor: pointer;
 }
+
+.container-cards {
+  overflow: hidden;
+}
+
+.card {
+  transition: transform 1s ease;
+}
