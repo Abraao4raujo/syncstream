@@ -19,7 +19,7 @@
   top: 10%;
   left: 5%;
   transform: translate(-50%, -50%);
-  color: #ffffff;
+  color: white;
   font-size: 50px;
   cursor: pointer;
   opacity: 0;
@@ -28,7 +28,7 @@
 .inf-movie:hover .poster,
 .play-container:hover .poster {
   transform: scale(1.1);
-  opacity: 0.1;
+  opacity: 0.5;
 }
 
 .inf-movie {
@@ -51,7 +51,7 @@
 .title-movie,
 .overview-movie {
   position: absolute;
-  color: #ffffff;
+  color: white;
   font-family: "Roboto", sans-serif;
   opacity: 0;
 }
@@ -60,11 +60,18 @@
   top: 10%;
   left: 38%;
   font-size: 18px;
+  font-weight: bold;
 }
 
 .overview-movie {
   top: 55%;
   left: 5%;
-  font-size: 12px;
+  font-size: 14px;
   text-align: left;
+}
+
+@media only screen and (max-width: 1800px) {
+  .card{
+    
+  }
 }

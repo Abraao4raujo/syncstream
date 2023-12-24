@@ -1,5 +1,4 @@
 import useFetch from "../adapters/useFetch";
-// import HorizontalCards from "../components/cards/HorizontalCards.jsx";
 import VerticalCards from "../components/cards/VerticalCards.jsx";
 import { Header } from "../components/header/header";
 

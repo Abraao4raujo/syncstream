@@ -5,10 +5,8 @@ import { useEffect, useState } from "react";
 const HorizontalCards = (dataAPI) => {
   const [number, setNumber] = useState(0);
 
-  function changeSlide(newNumber) {
+  function changeSlide() {
     let listaFilmes = document.querySelector(".cards");
-
-    console.log(newNumber);
 
     if (number >= 0) {
       listaFilmes.scrollLeft = 290 * number;
@@ -26,8 +24,6 @@ const HorizontalCards = (dataAPI) => {
   useEffect(() => {
     changeSlide(number);
   }, [number]);
-
-  // const tamanhoTotalTela = 4350;
 
   return (
     <div className="container-cards">
