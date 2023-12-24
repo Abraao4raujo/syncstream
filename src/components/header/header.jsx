@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import "../../styles/header.css";
 
-export const Header = () => {
+export const Header = ({ showModal, setShowModal, salaCriada, nomeSala }) => {
   return (
     <div className="header">
       <nav>
@@ -11,7 +11,11 @@ export const Header = () => {
         </Link>
         <Link to="/series">SÉRIES</Link>
         <Link to="/movies">FILMES</Link>
-        <Link to="room">CRIAR SALA</Link>
+        {salaCriada ? (
+          <Link>SALA DE {nomeSala}</Link>
+        ) : (
+          <Link onClick={() => setShowModal(!showModal)}>CRIAR SALA</Link>
+        )}
         <div className="divInput">
           <div className="inputContainer"></div>
           <input
