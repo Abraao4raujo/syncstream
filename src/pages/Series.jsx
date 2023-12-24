@@ -1,10 +1,18 @@
 import { Header } from "../components/header/header";
+import useFetch from "../adapters/useFetch";
+import VerticalCards from "../components/cards/VerticalCards.jsx";
 
 const Series = () => {
+  const data = useFetch(
+    `https://api.themoviedb.org/3/discover/tv?api_key=${
+      import.meta.env.VITE_API_KEY
+    }&language=pt-BR&page=1`
+  );
+
   return (
     <>
       <Header />
-      <h1>VOCÊ ESTÁ NA TELA DE SERIES</h1>
+      <VerticalCards dataAPI={data} />
     </>
   );
 };

@@ -2,6 +2,7 @@ import { Header } from "../components/header/header";
 import "../styles/main.css";
 import HorizontalCards from "../components/cards/HorizontalCards.jsx";
 import useFetch from "../adapters/useFetch.jsx";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const data = useFetch(
@@ -16,8 +17,10 @@ const Home = () => {
       <div className="containerFilmeDestaque">
         <img src="../../public/img/capa-zootopia.png" />
       </div>
-      <div className="main">
-        <h1>Movies</h1>
+      <div className="main-movie">
+        <Link to="../movies" className="linkToOtherPage">
+          <h1>Movies {">"}</h1>
+        </Link>
         <HorizontalCards dataAPI={data} />
       </div>
     </>
