@@ -1,6 +1,5 @@
 import useFetch from "../adapters/useFetch";
 import VerticalCards from "../components/cards/VerticalCards.jsx";
-import { Header } from "../components/header/header";
 
 const Movies = () => {
   const data = useFetch(
@@ -11,7 +10,6 @@ const Movies = () => {
 
   return (
     <>
-      <Header />
       <VerticalCards dataAPI={data} />
     </>
   );

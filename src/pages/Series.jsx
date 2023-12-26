@@ -1,4 +1,3 @@
-import { Header } from "../components/header/header";
 import useFetch from "../adapters/useFetch";
 import VerticalCards from "../components/cards/VerticalCards.jsx";
 
@@ -11,7 +10,6 @@ const Series = () => {
 
   return (
     <>
-      <Header />
       <VerticalCards dataAPI={data} />
     </>
   );

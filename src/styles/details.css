@@ -10,6 +10,10 @@
   align-items: center;
 }
 
+.details-body-content {
+  z-index: 100;
+}
+
 .details-container-img > img {
   width: 50%;
 }

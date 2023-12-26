@@ -1,15 +1,9 @@
-import { Header } from "../components/header/header";
 import "../styles/main.css";
 import HorizontalCards from "../components/cards/HorizontalCards.jsx";
 import useFetch from "../adapters/useFetch.jsx";
 import { Link } from "react-router-dom";
-import { useState } from "react";
 
-const Home = () => {
-  const [showModal, setShowModal] = useState(false);
-  const [salaCriada, setSalaCriada] = useState(false);
-  const [nomeSala, setNomeSala] = useState("");
-
+const Home = ({ showModal, setShowModal, setNomeSala, setSalaCriada }) => {
   const data = useFetch(
     `https://api.themoviedb.org/3/movie/popular?api_key=${
       import.meta.env.VITE_API_KEY
@@ -18,12 +12,6 @@ const Home = () => {
 
   return (
     <>
-      <Header
-        setShowModal={setShowModal}
-        showModal={showModal}
-        salaCriada={salaCriada}
-        nomeSala={nomeSala}
-      />
       {showModal && (
         <div className="modalContainer">
           <div className="headerModal">
