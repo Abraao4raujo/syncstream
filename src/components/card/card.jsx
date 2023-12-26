@@ -1,7 +1,7 @@
 import "../../styles/card.css";
 import { BsPlayCircle } from "react-icons/Bs";
 import Details from "../../pages/Details";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const Card = (movie) => {
   const image_path = "https://image.tmdb.org/t/p/w500";
