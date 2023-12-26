@@ -4,6 +4,7 @@ import Cadastro from "./pages/Cadastro";
 import Home from "./pages/Home";
 import Movies from "./pages/Movies";
 import Series from "./pages/Series";
+import Details from "./pages/Details.jsx";
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
         <Route path="/home" element={<Home />} />
         <Route path="/movies" element={<Movies />} />
         <Route path="/series" element={<Series />} />
+        <Route path="/details" element={<Details />} />
       </Routes>
     </BrowserRouter>
   );

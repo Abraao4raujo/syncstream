@@ -1,0 +1,27 @@
+.details-body-content {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  text-align: right;
+  background-color: #3333337a;
+  justify-content: center;
+  align-items: center;
+}
+
+.details-container-img > img {
+  width: 50%;
+}
+
+.details-text {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  text-align: left;
+}
+
+.details-title,
+.details-text-paragraph {
+  color: white;
+}

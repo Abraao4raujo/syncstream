@@ -1,6 +1,7 @@
 import Card from "../card/card.jsx";
 import "../../styles/cards.css";
 import { useEffect, useState } from "react";
+import Details from "../../pages/Details.jsx";
 
 const HorizontalCards = (dataAPI) => {
   const [number, setNumber] = useState(0);
