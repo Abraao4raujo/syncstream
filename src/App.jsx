@@ -4,7 +4,6 @@ import Cadastro from "./pages/Cadastro";
 import Home from "./pages/Home";
 import Movies from "./pages/Movies";
 import Series from "./pages/Series";
-import Details from "./pages/Details.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import { Header } from "./components/header/header.jsx";
 import { useState } from "react";
@@ -40,7 +39,6 @@ const App = () => {
         />
         <Route path="/movies" element={<Movies />} />
         <Route path="/series" element={<Series />} />
-        <Route path="/details" element={<Details />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

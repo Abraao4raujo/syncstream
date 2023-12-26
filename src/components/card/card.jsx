@@ -1,27 +1,23 @@
 import "../../styles/card.css";
 import { BsPlayCircle } from "react-icons/Bs";
-import Details from "../../pages/Details";
-import { useState } from "react";
 
-const Card = (movie) => {
+const Card = ({ movie, abrirModalDetails }) => {
   const image_path = "https://image.tmdb.org/t/p/w500";
-  const [clicou, setClicou] = useState(false);
-  const [conteudo, setConteudo] = useState({
-    title: movie.movie.title,
-    desc: movie.movie.overview,
-    img: image_path,
-  });
 
-  function abrirModalDetails() {
-    setClicou(!clicou);
-  }
+  const abrirModal = () => {
+    abrirModalDetails(
+      movie.title,
+      movie.overview,
+      `${image_path}${movie.poster_path}`
+    );
+  };
 
   return (
     <>
-      <li className="card" key={movie.id} onClick={() => abrirModalDetails()}>
+      <li className="card" key={movie.id} onClick={abrirModal}>
         <div className="inf-movie">
           <img
-            src={`${image_path}${movie.movie.poster_path}`}
+            src={`${image_path}${movie.poster_path}`}
             alt={movie.title}
             className="poster"
           />
@@ -30,17 +26,10 @@ const Card = (movie) => {
               <BsPlayCircle />
             </div>
           </div>
-          <label className="title-movie">{movie.movie.title}</label>
-          <label className="overview-movie">{movie.movie.overview}</label>
+          <label className="title-movie">{movie.title}</label>
+          <label className="overview-movie">{movie.overview}</label>
         </div>
       </li>
-      {clicou && (
-        <Details
-          imgPath={conteudo.img}
-          title={conteudo.title}
-          desc={conteudo.desc}
-        />
-      )}
     </>
   );
 };
