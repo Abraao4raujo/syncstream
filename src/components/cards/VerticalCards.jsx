@@ -1,15 +1,28 @@
 import Card from "../card/card.jsx";
 import "../../styles/VerticalCards.css";
+import Details from "../../pages/Details";
+import { useState } from "react";
+const VerticalCards = (dataAPI) => {
+  const [conteudo, setConteudo] = useState(null);
 
-const VerticalCards = ({ dataAPI }) => {
+  const abrirModalDetails = (title, desc, img) => {
+    setConteudo({ title, desc, img });
+  };
+
   return (
-    <>
+    <div className="mainBody">
+      {conteudo && <Details infApi={conteudo} setConteudo={setConteudo} />}
+
       <div className="grid-cards">
-        {dataAPI.map((item, index) => (
-          <Card movie={item} key={index} />
+        {dataAPI.dataAPI.map((item, index) => (
+          <Card
+            movie={item}
+            key={index}
+            abrirModalDetails={abrirModalDetails}
+          />
         ))}
       </div>
-    </>
+    </div>
   );
 };
 

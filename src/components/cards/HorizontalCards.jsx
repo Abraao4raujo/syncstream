@@ -5,6 +5,11 @@ import Details from "../../pages/Details.jsx";
 
 const HorizontalCards = (dataAPI) => {
   const [number, setNumber] = useState(0);
+  const [conteudo, setConteudo] = useState(null);
+
+  const abrirModalDetails = (title, desc, img) => {
+    setConteudo({ title, desc, img });
+  };
 
   function changeSlide() {
     let listaFilmes = document.querySelector(".cards");
@@ -27,18 +32,21 @@ const HorizontalCards = (dataAPI) => {
   }, [number]);
 
   return (
-    <div className="container-cards">
-      <ul className="movie-list">
-        <li onClick={decreaseNumber}>{"<"}</li>
-        <li onClick={increaseNumber}>{">"}</li>
-      </ul>
+    <>
+      {conteudo && <Details infApi={conteudo} setConteudo={setConteudo} />}
+      <div className="container-cards">
+        <ul className="movie-list">
+          <li onClick={decreaseNumber}>{"<"}</li>
+          <li onClick={increaseNumber}>{">"}</li>
+        </ul>
 
-      <ul className="cards">
-        {dataAPI.dataAPI.map((item, index) => (
-          <Card movie={item} key={index} />
-        ))}
-      </ul>
-    </div>
+        <ul className="cards">
+          {dataAPI.dataAPI.map((item, index) => (
+            <Card movie={item} key={index} abrirModalDetails={abrirModalDetails}/>
+          ))}
+        </ul>
+      </div>
+    </>
   );
 };
 
