@@ -5,7 +5,9 @@ const Card = ({ movie, abrirModalDetails }) => {
   const image_path = "https://image.tmdb.org/t/p/w500";
 
   const abrirModal = () => {
+    scrollTo(0, 0);
     abrirModalDetails(
+      movie.name,
       movie.title,
       movie.overview,
       `${image_path}${movie.poster_path}`
@@ -18,7 +20,7 @@ const Card = ({ movie, abrirModalDetails }) => {
         <div className="inf-movie">
           <img
             src={`${image_path}${movie.poster_path}`}
-            alt={movie.title}
+            alt={movie.name || movie.title}
             className="poster"
           />
           <div className="play-container">
@@ -26,7 +28,7 @@ const Card = ({ movie, abrirModalDetails }) => {
               <BsPlayCircle />
             </div>
           </div>
-          <label className="title-movie">{movie.title}</label>
+          <label className="title-movie">{movie.name || movie.title}</label>
           <label className="overview-movie">{movie.overview}</label>
         </div>
       </li>

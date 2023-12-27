@@ -4,9 +4,9 @@ import Details from "../../pages/Details";
 import { useState } from "react";
 const VerticalCards = (dataAPI) => {
   const [conteudo, setConteudo] = useState(null);
-
-  const abrirModalDetails = (title, desc, img) => {
-    setConteudo({ title, desc, img });
+  
+  const abrirModalDetails = (name, title, desc, img) => {
+    setConteudo({ name, title, desc, img });
   };
 
   return (
