@@ -46,11 +46,6 @@ const Login = () => {
             }}
           />
 
-          <label className="checkbox-keep-connected">
-            <input type="checkbox" />
-            Manter-se conectado
-          </label>
-
           <div className="options-login">
             <button className="modal-button" onClick={handleLogin}>
               Entrar
