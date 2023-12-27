@@ -7,24 +7,26 @@ const HorizontalCards = (dataAPI) => {
   const [number, setNumber] = useState(0);
   const [conteudo, setConteudo] = useState(null);
 
-  const abrirModalDetails = (title, desc, img) => {
-    setConteudo({ title, desc, img });
+  const abrirModalDetails = (name, title, desc, img) => {
+    setConteudo({ name, title, desc, img });
   };
 
   function changeSlide() {
     let listaFilmes = document.querySelector(".cards");
 
-    if (number >= 0) {
-      listaFilmes.scrollLeft = 290 * number;
-    }
+    listaFilmes.scrollLeft = 290 * number;
   }
 
   function decreaseNumber() {
-    setNumber((prevNumber) => prevNumber - 1);
+    if (number > 0) {
+      setNumber((prevNumber) => prevNumber - 1);
+    }
   }
 
   function increaseNumber() {
-    setNumber((prevNumber) => prevNumber + 1);
+    if (number < 15) {
+      setNumber((prevNumber) => prevNumber + 1);
+    }
   }
 
   useEffect(() => {
@@ -42,7 +44,11 @@ const HorizontalCards = (dataAPI) => {
 
         <ul className="cards">
           {dataAPI.dataAPI.map((item, index) => (
-            <Card movie={item} key={index} abrirModalDetails={abrirModalDetails}/>
+            <Card
+              movie={item}
+              key={index}
+              abrirModalDetails={abrirModalDetails}
+            />
           ))}
         </ul>
       </div>

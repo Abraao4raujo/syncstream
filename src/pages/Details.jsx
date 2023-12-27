@@ -9,7 +9,7 @@ const Details = ({ infApi, setConteudo }) => {
             <img src={infApi.img} alt="" />
           </div>
           <div className="details-text">
-            <h2 className="details-title">{infApi.title}</h2>
+            <h2 className="details-title">{infApi.title || infApi.name}</h2>
             <p className="details-text-paragraph">{infApi.desc}</p>
           </div>
           <span

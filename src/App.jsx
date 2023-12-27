@@ -25,6 +25,7 @@ const App = () => {
         salaCriada={salaCriada}
         nomeSala={nomeSala}
       />
+      
       <Routes>
         <Route
           path="/home"

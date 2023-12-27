@@ -26,6 +26,7 @@
   font-family: "Bebas Neue", sans-serif;
   color: white;
   margin-left: 20px;
+  display: inline;
 }
 
 .modalContainer {

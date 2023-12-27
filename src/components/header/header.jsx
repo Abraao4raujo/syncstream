@@ -16,17 +16,6 @@ export const Header = ({ showModal, setShowModal, salaCriada, nomeSala }) => {
         ) : (
           <Link onClick={() => setShowModal(!showModal)}>CRIAR SALA</Link>
         )}
-        <div className="divInput">
-          <div className="inputContainer"></div>
-          <input
-            type="text"
-            className="inputSearch"
-            placeholder="Digite o nome do filme ou série"
-          />
-          <button className="btnSearch">
-            <AiOutlineSearch />
-          </button>
-        </div>
       </nav>
     </div>
   );
