@@ -2,8 +2,9 @@ import "../styles/main.css";
 import HorizontalCards from "../components/cards/HorizontalCards.jsx";
 import useFetch from "../adapters/useFetch.jsx";
 import { Link } from "react-router-dom";
+import ModalRoom from "../components/ModalsRoom/ModalRoom.jsx";
 
-const Home = ({ showModal, setShowModal, setNomeSala, setSalaCriada }) => {
+const Home = () => {
   const data = useFetch(
     `https://api.themoviedb.org/3/movie/popular?api_key=${
       import.meta.env.VITE_API_KEY
@@ -12,7 +13,7 @@ const Home = ({ showModal, setShowModal, setNomeSala, setSalaCriada }) => {
 
   return (
     <>
-      {showModal && (
+      {/* {showModal && (
         <div className="modalContainer">
           <div className="headerModal">
             <h2>Criar Sala</h2>
@@ -43,7 +44,7 @@ const Home = ({ showModal, setShowModal, setNomeSala, setSalaCriada }) => {
             </button>
           </div>
         </div>
-      )}
+      )} */}
       <div className="containerFilmeDestaque">
         <img src="../../public/img/capa-zootopia.png" />
       </div>

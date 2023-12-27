@@ -1,8 +1,13 @@
 import { Link } from "react-router-dom";
-import { AiOutlineSearch } from "react-icons/ai";
 import "../../styles/header.css";
+import ModalRoom from "../ModalsRoom/ModalRoom";
+import { useState } from "react";
 
-export const Header = ({ showModal, setShowModal, salaCriada, nomeSala }) => {
+export const Header = () => {
+  const [salaCriada, setSalaCriada] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [nomeSala, setNomeSala] = useState("");
+  
   return (
     <div className="header">
       <nav>
@@ -17,6 +22,12 @@ export const Header = ({ showModal, setShowModal, salaCriada, nomeSala }) => {
           <Link onClick={() => setShowModal(!showModal)}>CRIAR SALA</Link>
         )}
       </nav>
+      <ModalRoom
+        showModal={showModal}
+        setShowModal={setShowModal}
+        setNomeSala={setNomeSala}
+        setSalaCriada={setSalaCriada}
+      />
     </div>
   );
 };

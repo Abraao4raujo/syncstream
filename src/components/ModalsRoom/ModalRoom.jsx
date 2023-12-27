@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
-const ModalRoom = ({ setNomeSala, setSalaCriada }) => {
-  const [showModal, setShowModal] = useState(true);
+const ModalRoom = ({ showModal, setShowModal, setNomeSala, setSalaCriada }) => {
 
   return (
     <>

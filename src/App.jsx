@@ -6,38 +6,18 @@ import Movies from "./pages/Movies";
 import Series from "./pages/Series";
 import NotFound from "./pages/NotFound.jsx";
 import { Header } from "./components/header/header.jsx";
-import { useState } from "react";
 
 const App = () => {
-  const [salaCriada, setSalaCriada] = useState(false);
-  const [nomeSala, setNomeSala] = useState("");
-  const [showModal, setShowModal] = useState(false);
-
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Cadastro />} />
       </Routes>
-      <Header
-        setShowModal={setShowModal}
-        showModal={showModal}
-        salaCriada={salaCriada}
-        nomeSala={nomeSala}
-      />
-      
+      <Header />
+
       <Routes>
-        <Route
-          path="/home"
-          element={
-            <Home
-              showModal={showModal}
-              setShowModal={setShowModal}
-              setNomeSala={setNomeSala}
-              setSalaCriada={setSalaCriada}
-            />
-          }
-        />
+        <Route path="/home" element={<Home />} />
         <Route path="/movies" element={<Movies />} />
         <Route path="/series" element={<Series />} />
         <Route path="*" element={<NotFound />} />
