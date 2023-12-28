@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
+import { auth } from "../../adapters/firebaseConfig";
 
 const ModalRoom = ({ showModal, setShowModal, setNomeSala, setSalaCriada }) => {
-
+  const user = auth.currentUser;
   return (
     <>
       {showModal && (
@@ -16,7 +17,7 @@ const ModalRoom = ({ showModal, setShowModal, setNomeSala, setSalaCriada }) => {
                 type="text"
                 name="nome"
                 id="mainNome"
-                onChange={(event) => setNomeSala(event.target.value)}
+                value={user.displayName}
               />
             </div>
             <div className="inputsPassword">
@@ -27,6 +28,8 @@ const ModalRoom = ({ showModal, setShowModal, setNomeSala, setSalaCriada }) => {
           <div className="footerModal">
             <button
               onClick={() => {
+                const nomeSala = document.querySelector("#mainNome").value;
+                setNomeSala(nomeSala);
                 setSalaCriada(true);
                 setShowModal(false);
               }}

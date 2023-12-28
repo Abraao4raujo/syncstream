@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import "../../styles/header.css";
 import ModalRoom from "../ModalsRoom/ModalRoom";
 import { useState } from "react";
@@ -28,6 +28,7 @@ export const Header = () => {
         setNomeSala={setNomeSala}
         setSalaCriada={setSalaCriada}
       />
+      <Outlet/>
     </div>
   );
 };

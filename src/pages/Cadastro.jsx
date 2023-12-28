@@ -4,10 +4,14 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 const Cadastro = () => {
-  const [nome, setNome] = useState("");
+  const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const CreatingNewUser = { nome: nome, email: email, password: password };
+  const CreatingNewUser = {
+    displayName: displayName,
+    email: email,
+    password: password,
+  };
 
   return (
     <div className="telaTotal">
@@ -21,7 +25,7 @@ const Cadastro = () => {
           className="modal-input"
           type="text"
           placeholder="Digite seu nome"
-          onChange={({ target }) => setNome(target.value)}
+          onChange={({ target }) => setDisplayName(target.value)}
         />
         <h2 className="title_input">Email</h2>
         <input

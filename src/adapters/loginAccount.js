@@ -1,12 +1,13 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "./firebaseConfig";
 
-const loginAccount = async ({ email, password }) => {
+const loginAccount = async ({ email, password, displayName }) => {
   try {
     const userCredential = await signInWithEmailAndPassword(
       auth,
       email,
-      password
+      password,
+      displayName
     );
     window.location.href = "/home";
     return userCredential;
