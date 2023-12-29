@@ -1,20 +1,41 @@
 import "../styles/paginaAutenticacao.css";
 import { Link } from "react-router-dom";
 import loginAccount from "../adapters/loginAccount";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { auth } from "../adapters/firebaseConfig";
 import { useState } from "react";
+import { FaGoogle } from "react-icons/fa";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [displayName, setDisplayName] = useState("");
   const user = {
-    email: email,
-    password: password,
+    email,
+    password,
+    displayName,
   };
 
   async function handleLogin(event) {
     event.preventDefault();
     await loginAccount(user);
+  }
+
+  function handleSignInGoogle() {
+    const provider = new GoogleAuthProvider();
+
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        setEmail(result.user.email);
+        setPassword(result.user.providerId);
+        setDisplayName(result.user.displayName);
+      })
+      .then(() => {
+        window.location.href = "/home";
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   return (
@@ -55,6 +76,17 @@ const Login = () => {
             <Link to="/register" className="link">
               Criar conta
             </Link>
+            <div className="loginGoogle">
+              <button
+                className="btnGoogle"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleSignInGoogle();
+                }}
+              >
+                <FaGoogle style={{ marginRight: "5px" }} /> Entrar com Google
+              </button>
+            </div>
           </div>
         </form>
         <img

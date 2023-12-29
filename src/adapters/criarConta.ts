@@ -8,6 +8,7 @@ const newUser = async ({ email, password, displayName }) => {
       email,
       password
     );
+
     updateProfile(userCredential.user, { displayName: displayName });
     window.location.href = "/home";
     return userCredential;
