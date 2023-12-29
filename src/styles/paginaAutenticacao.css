@@ -119,3 +119,15 @@ h2 {
   object-fit: cover;
   width: 100%;
 }
+
+.btnGoogle {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 20px;
+  font-size: 18px;
+  cursor: pointer;
+}
