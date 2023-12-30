@@ -2,11 +2,13 @@ import { Link, Outlet } from "react-router-dom";
 import "../../styles/header.css";
 import ModalRoom from "../ModalsRoom/ModalRoom";
 import { useState } from "react";
+import CreatedRoom from "../ModalsRoom/CreatedRoom";
 
 export const Header = () => {
   const [salaCriada, setSalaCriada] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [nomeSala, setNomeSala] = useState("");
+  const [showRoom, setShowRoom] = useState(false)
   
   return (
     <div className="header">
@@ -17,7 +19,7 @@ export const Header = () => {
         <Link to="/series">SÉRIES</Link>
         <Link to="/movies">FILMES</Link>
         {salaCriada ? (
-          <Link>SALA DE {nomeSala}</Link>
+          <Link onClick={() => setShowRoom(true)}>SALA DE {nomeSala}</Link>
         ) : (
           <Link onClick={() => setShowModal(!showModal)}>CRIAR SALA</Link>
         )}
@@ -28,6 +30,7 @@ export const Header = () => {
         setNomeSala={setNomeSala}
         setSalaCriada={setSalaCriada}
       />
+      <CreatedRoom nomeSala={nomeSala} showRoom={showRoom}/>
       <Outlet/>
     </div>
   );

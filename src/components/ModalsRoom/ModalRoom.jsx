@@ -18,6 +18,7 @@ const ModalRoom = ({ showModal, setShowModal, setNomeSala, setSalaCriada }) => {
                 name="nome"
                 id="mainNome"
                 value={user.displayName}
+                disabled
               />
             </div>
             <div className="inputsPassword">
@@ -28,8 +29,7 @@ const ModalRoom = ({ showModal, setShowModal, setNomeSala, setSalaCriada }) => {
           <div className="footerModal">
             <button
               onClick={() => {
-                const nomeSala = document.querySelector("#mainNome").value;
-                setNomeSala(nomeSala);
+                setNomeSala(user.displayName);
                 setSalaCriada(true);
                 setShowModal(false);
               }}
