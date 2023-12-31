@@ -19,7 +19,7 @@ export const Header = () => {
         <Link to="/series">SÉRIES</Link>
         <Link to="/movies">FILMES</Link>
         {salaCriada ? (
-          <Link onClick={() => setShowRoom(true)}>SALA DE {nomeSala}</Link>
+          <Link onClick={() => setShowRoom(!showRoom)}>SALA DE {nomeSala}</Link>
         ) : (
           <Link onClick={() => setShowModal(!showModal)}>CRIAR SALA</Link>
         )}
