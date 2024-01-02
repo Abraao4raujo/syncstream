@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { readUserData } from "../../adapters/readData";
+import { auth } from "../../adapters/firebaseConfig";
+import { getDatabase, ref, child, get } from "firebase/database";
 
 const Label = styled.p`
   color: #fff;
@@ -21,24 +24,21 @@ const List = styled.li`
 `;
 
 const CreatedRoom = ({ nomeSala, showRoom }) => {
-  const [usersConnected, setUsersConnected] = useState([
-    {
-      id: 1,
-      name: "abraham1",
-    },
-    {
-      id: 2,
-      name: "abraham2",
-    },
-    {
-      id: 3,
-      name: "abraham3",
-    },
-    {
-      id: 4,
-      name: "abraham4",
-    },
-  ]);
+  const [usersConnected, setUsersConnected] = useState([]);
+  const dbRef = ref(getDatabase());
+
+  async function searchUsers() {
+    const snapshot = await get(child(dbRef, `Users/${nomeSala}`));
+    if (await snapshot.val()) {
+      setUsersConnected(await snapshot.val().username);
+    }
+    // if (snapshot.exists()) {
+    //   setUsersConnected(snapshot.val());
+    // }
+  }
+  useEffect(() => {
+    searchUsers();
+  }, []);
   return (
     <>
       {showRoom && (
@@ -49,8 +49,9 @@ const CreatedRoom = ({ nomeSala, showRoom }) => {
           <div className="mainModal">
             <div className="inputsToCreatedRoom">
               <Label>Usuarios Conectados</Label>
+
               <Lists>
-                {usersConnected.map(({ id, name }) => (
+                {usersConnected && usersConnected.map(({ id, name }) => (
                   <List key={id}>{name}</List>
                 ))}
               </Lists>
