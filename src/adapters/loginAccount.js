@@ -10,6 +10,7 @@ const loginAccount = async ({ email, password, displayName }) => {
       displayName
     );
     window.location.href = "/home";
+
     return userCredential;
   } catch (error) {
     console.log(error);
