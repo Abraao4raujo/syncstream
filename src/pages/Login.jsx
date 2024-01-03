@@ -1,26 +1,45 @@
 import "../styles/paginaAutenticacao.css";
 import { Link } from "react-router-dom";
-import loginAccount from "../adapters/loginAccount";
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import {
+  signInWithPopup,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+} from "firebase/auth";
 import { auth } from "../adapters/firebaseConfig";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [displayName, setDisplayName] = useState("");
-  const user = {
-    email,
-    password,
-    displayName,
-  };
+  const [username, setUsername] = useState("");
 
-  async function handleLogin(event) {
-    event.preventDefault();
-    await loginAccount(user);
+  // verifica se o usuario ainda está conectado, toda vez que a pagina é carregada
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        window.location.href = "/home";
+      }
+    });
+  }, []);
+
+  // login com email e senha
+  function handleLogin(email, password) {
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log("Usuario cadastrado com sucesso!", user);
+        window.location.href = "/home";
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        alert("Email ou senha inválido!");
+      });
   }
 
+  // login com google
   function handleSignInGoogle() {
     const provider = new GoogleAuthProvider();
 
@@ -28,7 +47,7 @@ const Login = () => {
       .then((result) => {
         setEmail(result.user.email);
         setPassword(result.user.providerId);
-        setDisplayName(result.user.displayName);
+        setUsername(result.user.displayName);
       })
       .then(() => {
         window.location.href = "/home";
@@ -61,14 +80,19 @@ const Login = () => {
             className="modal-input"
             type="password"
             placeholder="*********"
-            id="loginPassword"
             onChange={({ target }) => {
               setPassword(target.value);
             }}
           />
 
           <div className="options-login">
-            <button className="modal-button" onClick={handleLogin}>
+            <button
+              className="modal-button"
+              onClick={(e) => {
+                e.preventDefault();
+                handleLogin(email, password);
+              }}
+            >
               Entrar
             </button>
 

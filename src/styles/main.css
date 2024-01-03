@@ -51,6 +51,7 @@
 
 .headerModal {
   margin-bottom: 30px;
+  display: flex;
 }
 
 .inputsName,

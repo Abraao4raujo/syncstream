@@ -1,15 +1,30 @@
 import { Link, Outlet } from "react-router-dom";
-import "../../styles/header.css";
+import { useEffect, useState } from "react";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "../../adapters/firebaseConfig";
 import ModalRoom from "../ModalsRoom/ModalRoom";
-import { useState } from "react";
 import CreatedRoom from "../ModalsRoom/CreatedRoom";
+import "../../styles/header.css";
 
 export const Header = () => {
   const [salaCriada, setSalaCriada] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [nomeSala, setNomeSala] = useState("");
-  const [showRoom, setShowRoom] = useState(false)
-  
+  const [showRoom, setShowRoom] = useState(false);
+  const [btnSignOut, setBtnSignOut] = useState(false);
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user !== null) {
+        setBtnSignOut(true);
+      }
+    });
+  }, []);
+
+  function deslogar() {
+    signOut(auth);
+  }
+
   return (
     <div className="header">
       <nav>
@@ -23,6 +38,16 @@ export const Header = () => {
         ) : (
           <Link onClick={() => setShowModal(!showModal)}>CRIAR SALA</Link>
         )}
+        {btnSignOut && (
+          <Link
+            onClick={(e) => {
+              e.preventDefault();
+              deslogar();
+            }}
+          >
+            sair da conta
+          </Link>
+        )}
       </nav>
       <ModalRoom
         showModal={showModal}
@@ -30,8 +55,8 @@ export const Header = () => {
         setNomeSala={setNomeSala}
         setSalaCriada={setSalaCriada}
       />
-      <CreatedRoom nomeSala={nomeSala} showRoom={showRoom}/>
-      <Outlet/>
+      <CreatedRoom nomeSala={nomeSala} showRoom={showRoom} />
+      <Outlet />
     </div>
   );
 };

@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { readUserData } from "../../adapters/readData";
-import { auth } from "../../adapters/firebaseConfig";
-import { getDatabase, ref, child, get } from "firebase/database";
 
 const Label = styled.p`
   color: #fff;
@@ -23,37 +21,56 @@ const List = styled.li`
   }
 `;
 
-const CreatedRoom = ({ nomeSala, showRoom }) => {
-  const [usersConnected, setUsersConnected] = useState([]);
-  const dbRef = ref(getDatabase());
+const Button = styled.button`
+  color: white;
+  background-color: #222;
+  border: none;
+  margin-left: 19px;
+  font-family: Arial, Helvetica, sans-serif;
+  cursor: pointer;
+  font-size: 1.3rem;
+`;
 
-  async function searchUsers() {
-    const snapshot = await get(child(dbRef, `Users/${nomeSala}`));
-    if (await snapshot.val()) {
-      setUsersConnected(await snapshot.val().username);
-    }
-    // if (snapshot.exists()) {
-    //   setUsersConnected(snapshot.val());
-    // }
+const CreatedRoom = ({ nomeSala, showRoom }) => {
+  const [usersConnected, setUsersConnected] = useState();
+  const [refresh, setRefresh] = useState(false);
+
+  function refreshModal() {
+    setRefresh(!refresh);
   }
+
   useEffect(() => {
-    searchUsers();
-  }, []);
+    readUserData().then((datas) => {
+      console.log("executou")
+      const propertyValues = Object.values(datas);
+      const onlineUsers = propertyValues.filter((user) => user.online);
+      setUsersConnected(onlineUsers);
+    });
+  }, [refresh]);
+
   return (
     <>
       {showRoom && (
         <div className="modalContainer">
           <div className="headerModal">
             <h2>Sala de {nomeSala}</h2>
+            <Button
+              onClick={() => {
+                refreshModal();
+              }}
+            >
+              Refresh
+            </Button>
           </div>
           <div className="mainModal">
             <div className="inputsToCreatedRoom">
               <Label>Usuarios Conectados</Label>
 
               <Lists>
-                {usersConnected && usersConnected.map(({ id, name }) => (
-                  <List key={id}>{name}</List>
-                ))}
+                {usersConnected.length > 0 &&
+                  usersConnected.map((user) => (
+                    <List key={user.username}>{user.username}</List>
+                  ))}
               </Lists>
             </div>
           </div>

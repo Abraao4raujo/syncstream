@@ -1,10 +1,11 @@
-import { getDatabase, set, ref } from "firebase/database";
+import { set, ref } from "firebase/database";
+import { database } from "./firebaseConfig";
 
-export const WriteUserData = (displayName, email) => {
-  const db = getDatabase();
-  return set(ref(db, `Users/${email}`), {
-    username: displayName,
+export default function WriteUserData(userId, username, email) {
+  set(ref(database, `Users/${userId}`), {
+    username: username,
     email: email,
     online: true,
   });
-};
+  return null;
+}

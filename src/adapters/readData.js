@@ -1,13 +1,15 @@
-import { getDatabase, ref, child, get } from "firebase/database";
+import { ref, child, get } from "firebase/database";
+import { database } from "./firebaseConfig";
 
-export async function readUserData(displayName) {
-  const dbRef = ref(getDatabase());
+export async function readUserData() {
+  const dbRef = ref(database);
   try {
-    const snapshot = await get(child(dbRef, `Users/${displayName}`));
+    const snapshot = await get(child(dbRef, `Users/`));
     if (snapshot.exists()) {
-      return snapshot.val();
+      return await snapshot.val();
     } else {
       console.log("No data available");
+      return null;
     }
   } catch (error) {
     console.error(error);
