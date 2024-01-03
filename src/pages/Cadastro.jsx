@@ -1,17 +1,26 @@
 import "../styles/paginaAutenticacao.css";
-import newUser from "../adapters/criarConta";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { auth } from "../adapters/firebaseConfig";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
 const Cadastro = () => {
-  const [displayName, setDisplayName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const CreatingNewUser = {
-    displayName: displayName,
-    email: email,
-    password: password,
-  };
+
+  // cadastrar usuario
+  function handleRegister(username, email, password) {
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        updateProfile(userCredential.user, { displayName: username });
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        console.log(errorMessage);
+        alert("Email já existe!");
+      });
+  }
 
   return (
     <div className="telaTotal">
@@ -25,7 +34,7 @@ const Cadastro = () => {
           className="modal-input"
           type="text"
           placeholder="Digite seu nome"
-          onChange={({ target }) => setDisplayName(target.value)}
+          onChange={({ target }) => setUsername(target.value)}
         />
         <h2 className="title_input">Email</h2>
         <input
@@ -44,7 +53,10 @@ const Cadastro = () => {
         <div className="options-login">
           <button
             className="modal-button"
-            onClick={() => newUser(CreatingNewUser)}
+            onClick={(e) => {
+              e.preventDefault();
+              handleRegister(username, email, password);
+            }}
           >
             Cadastrar
           </button>
