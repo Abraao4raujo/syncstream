@@ -1,5 +1,6 @@
 import { set, ref, update } from "firebase/database";
 import { database } from "./firebaseConfig";
+import { v4 as uuidv4 } from "uuid";
 
 export function WriteUserData(userId, username, email, status) {
   set(ref(database, `Users/${userId}`), {
@@ -22,4 +23,18 @@ export function DefineStatusUser(userId, status, displayname, email) {
       online: status,
     });
   }
+}
+
+export function WriteRoom(userId, username, password) {
+  let myuuid = uuidv4();
+  return set(ref(database, `Users/${userId}/idRoom`), {
+    senha: {
+      possuiSenha: password ? true : false,
+      senha: password || null,
+    },
+    codigo: myuuid,
+    nomeSala: `Sala de ${username}`,
+    salaExiste: true,
+    usuariosOnlines: { usuarios: username },
+  });
 }

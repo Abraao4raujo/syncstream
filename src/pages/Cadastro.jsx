@@ -15,6 +15,9 @@ const Cadastro = () => {
       .then((userCredential) => {
         updateProfile(userCredential.user, { displayName: username });
       })
+      .then(() => {
+        window.location.href = "/home";
+      })
       .catch((error) => {
         const errorMessage = error.message;
         console.log(errorMessage);

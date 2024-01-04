@@ -1,16 +1,12 @@
 import { Link, Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
-import {
-  getAuth,
-  getIdToken,
-  onAuthStateChanged,
-  signOut,
-} from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth, database } from "../../adapters/firebaseConfig";
 import ModalRoom from "../ModalsRoom/ModalRoom";
 import CreatedRoom from "../ModalsRoom/CreatedRoom";
 import "../../styles/header.css";
 import { DefineStatusUser } from "../../adapters/writeData";
+import { checkRoomExist } from "../../adapters/readData";
 
 export const Header = () => {
   const [salaCriada, setSalaCriada] = useState(false);
@@ -23,6 +19,10 @@ export const Header = () => {
     onAuthStateChanged(auth, (user) => {
       if (user !== null) {
         setBtnSignOut(true);
+        if (checkRoomExist(user.uid).then((data) => setSalaCriada(data))) {
+          setSalaCriada(true);
+          setNomeSala(user.displayName);
+        }
       }
     });
   }, []);
@@ -45,6 +45,7 @@ export const Header = () => {
         ) : (
           <Link onClick={() => setShowModal(!showModal)}>CRIAR SALA</Link>
         )}
+
         {btnSignOut && (
           <Link
             onClick={(e) => {
