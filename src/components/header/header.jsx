@@ -1,10 +1,16 @@
 import { Link, Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { auth } from "../../adapters/firebaseConfig";
+import {
+  getAuth,
+  getIdToken,
+  onAuthStateChanged,
+  signOut,
+} from "firebase/auth";
+import { auth, database } from "../../adapters/firebaseConfig";
 import ModalRoom from "../ModalsRoom/ModalRoom";
 import CreatedRoom from "../ModalsRoom/CreatedRoom";
 import "../../styles/header.css";
+import { DefineStatusUser } from "../../adapters/writeData";
 
 export const Header = () => {
   const [salaCriada, setSalaCriada] = useState(false);
@@ -22,6 +28,7 @@ export const Header = () => {
   }, []);
 
   function deslogar() {
+    DefineStatusUser(auth._currentUser.uid, false);
     signOut(auth);
   }
 

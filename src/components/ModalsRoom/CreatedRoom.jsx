@@ -41,7 +41,7 @@ const CreatedRoom = ({ nomeSala, showRoom }) => {
 
   useEffect(() => {
     readUserData().then((datas) => {
-      console.log("executou")
+      console.log("atualizando");
       const propertyValues = Object.values(datas);
       const onlineUsers = propertyValues.filter((user) => user.online);
       setUsersConnected(onlineUsers);

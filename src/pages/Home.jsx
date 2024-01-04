@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../adapters/firebaseConfig";
-import WriteUserData from "../adapters/writeData";
+import { DefineStatusUser } from "../adapters/writeData";
 import { readUserData } from "../adapters/readData.js";
 
 const Home = () => {
@@ -19,7 +19,7 @@ const Home = () => {
           if (e === true) {
             return null;
           } else {
-            WriteUserData(user.uid, user.displayName, user.email);
+            DefineStatusUser(user.uid, true, user.displayName, user.email);
           }
         });
       }
