@@ -1,7 +1,7 @@
 import { Link, Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { auth, database } from "../../adapters/firebaseConfig";
+import { auth } from "../../adapters/firebaseConfig";
 import ModalRoom from "../ModalsRoom/ModalRoom";
 import CreatedRoom from "../ModalsRoom/CreatedRoom";
 import "../../styles/header.css";

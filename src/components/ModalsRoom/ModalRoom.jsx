@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { auth } from "../../adapters/firebaseConfig";
 import { WriteRoom } from "../../adapters/writeData";
-import styled from "styled-components";
 import { IoSend } from "react-icons/io5";
-import { joinRoom, readUserData } from "../../adapters/readData";
+import { joinRoom } from "../../adapters/readData";
+import styled from "styled-components";
 
 const LabelInfSalaExist = styled.label`
   color: white;
@@ -57,13 +57,6 @@ const ModalRoom = ({ showModal, setShowModal, setNomeSala, setSalaCriada }) => {
 
   function handleCodeRoom() {
     joinRoom(codeRoom, auth._currentUser.displayName);
-    // .then((datas) => {
-    //   const propertyValues = Object.values(datas);
-    //   return propertyValues.filter((user) => user.idRoom);
-    // })
-    // .then((idRoom) =>
-    //   idRoom.map((e) => console.log(e.idRoom.codigo === codeRoom))
-    // );
   }
 
   return (
