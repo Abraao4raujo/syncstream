@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getDatabase } from "firebase/database"
+import { getDatabase } from "firebase/database";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDMsmozeY1ybThnEjAJJzFRvjeCLI-Br9E",
@@ -10,7 +10,7 @@ const firebaseConfig = {
   messagingSenderId: "638889967854",
   appId: "1:638889967854:web:88b6676b15ef861be273ff",
   measurementId: "G-Z71ED8M4WF",
-  databaseURL: `https://${import.meta.env.VITE_DATABASE_NAME}.firebaseio.com`
+  databaseURL: `https://${import.meta.env.VITE_DATABASE_NAME}.firebaseio.com`,
 };
 
 const app = initializeApp(firebaseConfig);
