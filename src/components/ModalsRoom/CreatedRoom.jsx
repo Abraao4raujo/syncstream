@@ -120,7 +120,7 @@ const CreatedRoom = ({ nomeSala, showRoom }) => {
             </div>
           </div>
           <DivFooter>
-            <LabelFooter>{codigoRoom && codigoRoom}</LabelFooter>
+            {codigoRoom && <LabelFooter>{codigoRoom}</LabelFooter>}
           </DivFooter>
         </div>
       )}
