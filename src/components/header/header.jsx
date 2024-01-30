@@ -2,7 +2,7 @@ import { Link, Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../../adapters/firebaseConfig";
-// import ModalRoom from "../ModalsRoom/ModalRoom";
+import ModalRoom from "../ModalsRoom/ModalRoom";
 // import CreatedRoom from "../ModalsRoom/CreatedRoom";
 import "../../styles/header.css";
 // import { DefineStatusUser } from "../../adapters/writeData";
@@ -11,10 +11,9 @@ import "../../styles/header.css";
 export const Header = () => {
   const [salaCriada, setSalaCriada] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [nomeSala, setNomeSala] = useState("");
   const [showRoom, setShowRoom] = useState(false);
   const [btnSignOut, setBtnSignOut] = useState(false);
-
+  const [nomeSala, setNomeSala] = useState()
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user !== null) {
@@ -40,11 +39,13 @@ export const Header = () => {
         </Link>
         <Link to="/series">SÉRIES</Link>
         <Link to="/movies">FILMES</Link>
-        {/* {salaCriada ? (
-          <Link onClick={() => setShowRoom(!showRoom)}>SALA DE {nomeSala}</Link>
+        {salaCriada ? (
+          <Link onClick={() => setShowRoom(!showRoom)}>
+            SALA DE {nomeSala && nomeSala}
+          </Link>
         ) : (
           <Link onClick={() => setShowModal(!showModal)}>CRIAR SALA</Link>
-        )} */}
+        )}
 
         {btnSignOut && (
           <Link
@@ -57,12 +58,12 @@ export const Header = () => {
           </Link>
         )}
       </nav>
-      {/* <ModalRoom
+      <ModalRoom
         showModal={showModal}
+        setSalaCriada={setSalaCriada}
         setShowModal={setShowModal}
         setNomeSala={setNomeSala}
-        setSalaCriada={setSalaCriada}
-      /> */}
+      />
       {/* <CreatedRoom nomeSala={nomeSala} showRoom={showRoom} /> */}
       <Outlet />
     </div>
