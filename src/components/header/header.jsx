@@ -2,11 +2,11 @@ import { Link, Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../../adapters/firebaseConfig";
-import ModalRoom from "../ModalsRoom/ModalRoom";
-import CreatedRoom from "../ModalsRoom/CreatedRoom";
+// import ModalRoom from "../ModalsRoom/ModalRoom";
+// import CreatedRoom from "../ModalsRoom/CreatedRoom";
 import "../../styles/header.css";
-import { DefineStatusUser } from "../../adapters/writeData";
-import { checkRoomExist } from "../../adapters/readData";
+// import { DefineStatusUser } from "../../adapters/writeData";
+// import { checkRoomExist } from "../../adapters/readData";
 
 export const Header = () => {
   const [salaCriada, setSalaCriada] = useState(false);
@@ -19,16 +19,16 @@ export const Header = () => {
     onAuthStateChanged(auth, (user) => {
       if (user !== null) {
         setBtnSignOut(true);
-        if (checkRoomExist(user.uid).then((data) => setSalaCriada(data))) {
-          setSalaCriada(true);
-          setNomeSala(user.displayName);
-        }
+        // if (checkRoomExist(user.uid).then((data) => setSalaCriada(data))) {
+        //   setSalaCriada(true);
+        //   setNomeSala(user.displayName);
+        // }
       }
     });
   }, []);
 
   function deslogar() {
-    DefineStatusUser(auth._currentUser.uid, false);
+    // DefineStatusUser(auth._currentUser.uid, false);
     signOut(auth);
   }
 
@@ -40,11 +40,11 @@ export const Header = () => {
         </Link>
         <Link to="/series">SÉRIES</Link>
         <Link to="/movies">FILMES</Link>
-        {salaCriada ? (
+        {/* {salaCriada ? (
           <Link onClick={() => setShowRoom(!showRoom)}>SALA DE {nomeSala}</Link>
         ) : (
           <Link onClick={() => setShowModal(!showModal)}>CRIAR SALA</Link>
-        )}
+        )} */}
 
         {btnSignOut && (
           <Link
@@ -57,13 +57,13 @@ export const Header = () => {
           </Link>
         )}
       </nav>
-      <ModalRoom
+      {/* <ModalRoom
         showModal={showModal}
         setShowModal={setShowModal}
         setNomeSala={setNomeSala}
         setSalaCriada={setSalaCriada}
-      />
-      <CreatedRoom nomeSala={nomeSala} showRoom={showRoom} />
+      /> */}
+      {/* <CreatedRoom nomeSala={nomeSala} showRoom={showRoom} /> */}
       <Outlet />
     </div>
   );

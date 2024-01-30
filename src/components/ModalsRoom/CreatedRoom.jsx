@@ -2,14 +2,17 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { readUserData } from "../../adapters/readData";
 import { IoMdRefresh } from "react-icons/io";
-const dbRef = ref(database);
 import { ref, child, get } from "firebase/database";
 import { auth, database } from "../../adapters/firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
+import io from "socket.io-client";
+
+const dbRef = ref(database);
 
 const Label = styled.p`
   color: #fff;
 `;
+
 const LabelFooter = styled.p`
   color: #222;
   font-size: 16px;
@@ -22,13 +25,16 @@ const Lists = styled.ul`
 `;
 
 const List = styled.li`
-  /* color: black; */
   font-size: 18px;
   margin-left: 19px;
   font-family: Arial, Helvetica, sans-serif;
   &::marker {
     color: #06da06;
   }
+`;
+const Message = styled.li`
+  font-size: 16px;
+  font-family: Arial, Helvetica, sans-serif;
 `;
 
 const Button = styled.button`
@@ -53,10 +59,34 @@ const DivFooter = styled.div`
   bottom: 40px;
 `;
 
+const socket = io("http://localhost:4000");
+
 const CreatedRoom = ({ nomeSala, showRoom }) => {
   const [usersConnected, setUsersConnected] = useState();
   const [refresh, setRefresh] = useState(false);
   const [codigoRoom, setCodigoRoom] = useState();
+  const [messageSended, setMessagesSended] = useState("");
+  const [chat, setChat] = useState([]);
+
+  useEffect(() => {
+    socket.on("message", (message) => {
+      chat.push(message);
+    });
+    return () => {
+      socket.off("message", (message) => console.log(message));
+    };
+  }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    chat.push(messageSended);
+
+    setMessagesSended(e.target[0].value);
+
+    socket.emit("message", messageSended);
+
+    console.log(messageSended);
+  };
 
   function refreshModal() {
     setRefresh(!refresh);
@@ -72,7 +102,6 @@ const CreatedRoom = ({ nomeSala, showRoom }) => {
 
   useEffect(() => {
     readUserData().then((datas) => {
-      console.log("atualizando");
       const propertyValues = Object.values(datas);
       const onlineUsers = propertyValues.filter((user) => user.online);
       setUsersConnected(onlineUsers);
@@ -112,12 +141,31 @@ const CreatedRoom = ({ nomeSala, showRoom }) => {
               <Label>Usuarios Conectados</Label>
 
               <Lists>
-                {usersConnected.length > 0 &&
+                {usersConnected &&
+                  usersConnected.length > 0 &&
                   usersConnected.map((user) => (
                     <List key={user.username}>{user.username}</List>
                   ))}
               </Lists>
             </div>
+          </div>
+          <div className="chat">
+            <div className="chat-message">
+              <ul>
+                {chat.map((msg) => (
+                  <Message key={msg} style={{ color: "white" }}>
+                    {msg}
+                  </Message>
+                ))}
+              </ul>
+            </div>
+            <form onSubmit={handleSubmit}>
+              <input
+                type="text"
+                // onChange={(e) => setMessagesSended(e.target.value)}
+              />
+              <button>Enviar</button>
+            </form>
           </div>
           <DivFooter>
             {codigoRoom && <LabelFooter>{codigoRoom}</LabelFooter>}

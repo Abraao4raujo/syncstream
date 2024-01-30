@@ -5,8 +5,8 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../adapters/firebaseConfig";
-import { DefineStatusUser } from "../adapters/writeData";
-import { readUserData } from "../adapters/readData.js";
+// import { DefineStatusUser } from "../adapters/writeData";
+// import { readUserData } from "../adapters/readData.js";
 
 const Home = () => {
   // verifica se o usuario ainda está conectado
@@ -14,15 +14,16 @@ const Home = () => {
     onAuthStateChanged(auth, (user) => {
       if (user === null) {
         window.location.href = "/";
-      } else {
-        readUserData(user.uid).then((e) => {
-          if (e === true) {
-            return null;
-          } else {
-            DefineStatusUser(user.uid, true, user.displayName, user.email);
-          }
-        });
       }
+      // else {
+      //   readUserData(user.uid).then((e) => {
+      //     if (e === true) {
+      //       return null;
+      //     } else {
+      //       DefineStatusUser(user.uid, true, user.displayName, user.email);
+      //     }
+      //   });
+      // }
     });
   }, []);
 

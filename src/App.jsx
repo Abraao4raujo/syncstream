@@ -10,7 +10,7 @@ import { Header } from "./components/header/header.jsx";
 
 const App = () => {
   return (
-    <div>
+    <div className="App">
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login />} />
