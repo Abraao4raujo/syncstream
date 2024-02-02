@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { auth } from "../../adapters/firebaseConfig";
 import styled from "styled-components";
+import { writeRoom } from "../../adapters/writeData";
 
 const OptionsRoom = styled.ul`
   display: flex;
@@ -61,19 +62,15 @@ const InputCode = styled.input`
   text-align: center;
 `;
 
-const CriarSala = ({ setShowModal, setSalaCriada, setNomeSala }) => {
-  const [password, setPassword] = useState();
+const CriarSala = ({ setShowModal, setSalaCriada, setNomeSala, username}) => {
   const [showInputCode, setShowInputCode] = useState(false);
-  // const [nomeSala, setNomeSala] = useState("");
   const [codeRoom, setCodeRoom] = useState();
   const [serchRoom, setSearchRoom] = useState(false);
-
-  const montagemInicial = useRef(false);
-
-  const username = auth.currentUser.displayName;
-
+  
   useEffect(() => {
-    if (codeRoom != null) {
+    console.log(codeRoom);
+
+    if (codeRoom != "") {
       console.log("Procurando sala");
       setSearchRoom(true);
     } else {
@@ -82,10 +79,10 @@ const CriarSala = ({ setShowModal, setSalaCriada, setNomeSala }) => {
   }, [codeRoom]);
 
   function criarSala() {
-    // WriteRoom(auth._currentUser.uid, auth._currentUser.displayName, password);
-    // UPDATE STATUS ROOM TO TRUE
+    // criando a sala passando id e username
+    writeRoom(auth._currentUser.uid, auth._currentUser.displayName);
 
-    setNomeSala(username);
+    setNomeSala(auth._currentUser.displayName);
     setSalaCriada(true);
     setShowModal(false);
   }
