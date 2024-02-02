@@ -49,10 +49,10 @@
 .modalContainer {
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   width: 400px;
   height: 30vh;
   padding: 15px;
-  justify-content: space-around;
   background: linear-gradient(#222, #222);
   position: absolute;
   top: 0;
@@ -69,7 +69,6 @@
 }
 
 .headerModal {
-  margin-bottom: 30px;
   display: flex;
 }
 

@@ -2,27 +2,35 @@ import { Link, Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../../adapters/firebaseConfig";
-import ModalRoom from "../ModalsRoom/ModalRoom";
-// import CreatedRoom from "../ModalsRoom/CreatedRoom";
 import "../../styles/header.css";
-// import { DefineStatusUser } from "../../adapters/writeData";
-// import { checkRoomExist } from "../../adapters/readData";
+import { readHasRoom } from "../../adapters/readData";
+import CriarSala from "../Room/CriarSala";
+import CreatedRoom from "../Room/SalaCriada";
 
 export const Header = () => {
   const [salaCriada, setSalaCriada] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showRoom, setShowRoom] = useState(false);
   const [btnSignOut, setBtnSignOut] = useState(false);
-  const [nomeSala, setNomeSala] = useState()
+  const [nomeSala, setNomeSala] = useState();
+  const [userHasRoom, setUserHasRoom] = useState(false);
+  const [dataUser, setDataUser] = useState()
+
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      if (user !== null) {
-        setBtnSignOut(true);
-        // if (checkRoomExist(user.uid).then((data) => setSalaCriada(data))) {
-        //   setSalaCriada(true);
-        //   setNomeSala(user.displayName);
-        // }
-      }
+      readHasRoom(user.uid).then((response) => {
+        if (user) {
+          setBtnSignOut(true);
+        }
+
+        if (response.room.hasRoom === null) {
+          return null;
+        } else {
+          setUserHasRoom(true);
+          setSalaCriada(true);
+          setNomeSala(response.username);
+        }
+      });
     });
   }, []);
 
@@ -39,12 +47,13 @@ export const Header = () => {
         </Link>
         <Link to="/series">SÉRIES</Link>
         <Link to="/movies">FILMES</Link>
+
         {salaCriada ? (
-          <Link onClick={() => setShowRoom(!showRoom)}>
+          <Link onClick={() => setShowRoom(true)}>
             SALA DE {nomeSala && nomeSala}
           </Link>
         ) : (
-          <Link onClick={() => setShowModal(!showModal)}>CRIAR SALA</Link>
+          <Link onClick={() => setShowModal(true)}>CRIAR SALA</Link>
         )}
 
         {btnSignOut && (
@@ -58,13 +67,16 @@ export const Header = () => {
           </Link>
         )}
       </nav>
-      <ModalRoom
-        showModal={showModal}
-        setSalaCriada={setSalaCriada}
-        setShowModal={setShowModal}
-        setNomeSala={setNomeSala}
-      />
-      {/* <CreatedRoom nomeSala={nomeSala} showRoom={showRoom} /> */}
+
+      {showModal && (
+        <CriarSala
+          setSalaCriada={setSalaCriada}
+          setShowModal={setShowModal}
+          setNomeSala={setNomeSala}
+          username={nomeSala}
+        />
+      )}
+      {showRoom && <CreatedRoom username={nomeSala}/>}
       <Outlet />
     </div>
   );
