@@ -1,5 +1,4 @@
 import "../../styles/card.css";
-import { BsPlayCircle } from "react-icons/Bs";
 
 const Card = ({ movie, abrirModalDetails }) => {
   const image_path = "https://image.tmdb.org/t/p/w500";
@@ -23,11 +22,6 @@ const Card = ({ movie, abrirModalDetails }) => {
             alt={movie.name || movie.title}
             className="poster"
           />
-          <div className="play-container">
-            <div className="play">
-              <BsPlayCircle />
-            </div>
-          </div>
           <label className="title-movie">{movie.name || movie.title}</label>
           <label className="overview-movie">{movie.overview}</label>
         </div>

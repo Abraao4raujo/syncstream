@@ -69,7 +69,6 @@ const CriarSala = ({ setShowModal, setSalaCriada, setNomeSala, username}) => {
   
   useEffect(() => {
     console.log(codeRoom);
-
     if (codeRoom != "") {
       console.log("Procurando sala");
       setSearchRoom(true);

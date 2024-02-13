@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-// import { readUserData } from "../../adapters/readData";
+
 import { ref, child, get, onValue } from "firebase/database";
 import { auth, database } from "../../adapters/firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
-// import io from "socket.io-client";
+
 import { BsClipboard2, BsClipboard2Check } from "react-icons/bs";
 
 const Label = styled.label`
@@ -58,60 +58,16 @@ const DivFooter = styled.div`
   bottom: 40px;
 `;
 
-// const socket = io("http://localhost:4000");
-
 const CreatedRoom = ({ username }) => {
   const [messageSended, setMessagesSended] = useState("");
   const [chat, setChat] = useState([]);
   const [usersInRoom, setUsersInRoom] = useState();
   const [codeRoom, setCodeRoom] = useState();
   const [copySuccess, setCopySuccess] = useState(
-    <BsClipboard2 style={{ fontSize: "1.2rem", color: "black"}} />
+    <BsClipboard2 style={{ fontSize: "1.2rem", color: "black" }} />
   );
 
   const user = auth.currentUser;
-
-  // useEffect(() => {
-  //   socket.on("message", (message) => {
-  //     chat.push(message);
-  //   });
-  //   return () => {
-  //     socket.off("message", (message) => console.log(message));
-  //   };
-  // }, []);
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   chat.push(messageSended);
-
-  //   setMessagesSended(e.target[0].value);
-
-  //   socket.emit("message", messageSended);
-
-  //   console.log(messageSended);
-  // };
-
-  // useEffect(() => {
-  //   onAuthStateChanged(auth, (user) => {
-  //     if (user !== null) {
-  //       readIdRoom(user.uid);
-  //     }
-  //   });
-  // }, []);
-
-  // async function readIdRoom(idUser) {
-  //   try {
-  //     const snapshot = await get(child(dbRef, `Users/${idUser}/idRoom/codigo`));
-  //     if (snapshot.exists()) {
-  //       setCodigoRoom(snapshot.val());
-  //     } else {
-  //       console.log("No data available");
-  //       return null;
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
 
   useState(() => {
     hasUserInRoom(user.uid);
@@ -150,13 +106,6 @@ const CreatedRoom = ({ username }) => {
                 ))}
               </ul>
             </div>
-            {/* <form onSubmit={handleSubmit}>
-              <input
-                type="text"
-                // onChange={(e) => setMessagesSended(e.target.value)}
-              />
-              <button>Enviar</button>
-            </form> */}
           </div>
           <DivFooter>
             {codeRoom && (

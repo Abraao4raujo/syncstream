@@ -14,28 +14,27 @@ export const Header = () => {
   const [btnSignOut, setBtnSignOut] = useState(false);
   const [nomeSala, setNomeSala] = useState();
   const [userHasRoom, setUserHasRoom] = useState(false);
-  const [dataUser, setDataUser] = useState()
+  const [dataUser, setDataUser] = useState();
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      readHasRoom(user.uid).then((response) => {
-        if (user) {
-          setBtnSignOut(true);
-        }
-
-        if (response.room.hasRoom === null) {
-          return null;
-        } else {
-          setUserHasRoom(true);
-          setSalaCriada(true);
-          setNomeSala(response.username);
-        }
-      });
+      if (user) {
+        readHasRoom(user.uid).then((response) => {
+          if (response !== null) {
+            // Verifica se response não é null
+            if (response.room && response.room.hasRoom !== null) {
+              setUserHasRoom(true);
+              setSalaCriada(true);
+              setNomeSala(response.username);
+            }
+          }
+        });
+        setBtnSignOut(true);
+      }
     });
   }, []);
 
   function deslogar() {
-    // DefineStatusUser(auth._currentUser.uid, false);
     signOut(auth);
   }
 
@@ -76,7 +75,7 @@ export const Header = () => {
           username={nomeSala}
         />
       )}
-      {showRoom && <CreatedRoom username={nomeSala}/>}
+      {showRoom && <CreatedRoom username={nomeSala} />}
       <Outlet />
     </div>
   );
