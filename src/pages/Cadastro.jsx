@@ -1,37 +1,45 @@
 import "../styles/paginaAutenticacao.css";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { auth } from "../adapters/firebaseConfig";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  updateProfile,
+} from "firebase/auth";
 
 const Cadastro = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [refreshPage, setRefreshPage] = useState();
 
   // cadastrar usuario
   function handleRegister(username, email, password) {
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        updateProfile(userCredential.user, { displayName: username });
-      })
-      .then(() => {
+      .then(async (userCredential) => {
+        await updateProfile(userCredential.user, { displayName: username });
         window.location.href = "/home";
       })
       .catch((error) => {
         const errorMessage = error.message;
         console.log(errorMessage);
-        alert("Email já existe!");
+        alert("Não foi possivel cadastrar o usuário");
+      })
+      .finally(() => {
+        setRefreshPage(true);
       });
   }
 
   return (
-    <div className="telaTotal">
-      <div className="imagemDeFundo">
-        <img src="../../public/img/capas-de-filmes.png" alt="imagem de fundo" />
-      </div>
-      <div className="modal-container">
-        <h1 className="modal-title">Cadastro</h1>
+    <div className="modal-container">
+      <h1 className="modal-title">Cadastro</h1>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleRegister(username, email, password);
+        }}
+      >
         <h2 className="title_input">Nome</h2>
         <input
           className="modal-input"
@@ -54,15 +62,8 @@ const Cadastro = () => {
           onChange={({ target }) => setPassword(target.value)}
         />
         <div className="options-login">
-          <button
-            className="modal-button"
-            onClick={(e) => {
-              e.preventDefault();
-              handleRegister(username, email, password);
-            }}
-          >
-            Cadastrar
-          </button>
+          <input type="submit" value="Cadastrar" className="modal-button" />
+
           <label>
             Já possui uma conta?
             <Link to="/" className="link">
@@ -70,12 +71,7 @@ const Cadastro = () => {
             </Link>
           </label>
         </div>
-        <img
-          className="modal-logo"
-          src="../img/logo-sem-fundo.png"
-          alt="Logo"
-        />
-      </div>
+      </form>
     </div>
   );
 };

@@ -58,67 +58,57 @@ const Login = () => {
   }
 
   return (
-    <div className="telaTotal">
-      <div className="imagemDeFundo">
-        <img src="../../public/img/capas-de-filmes.png" alt="imagem de fundo" />
-      </div>
-      <div className="modal-container">
-        <form>
-          <h1 className="modal-title">Login</h1>
-          <h2 className="title_input">Email</h2>
-          <input
-            className="modal-input"
-            type="text"
-            placeholder="Digite seu email"
-            id="loginEmail"
-            onChange={({ target }) => {
-              setEmail(target.value);
-            }}
-          />
-          <h2 className="title_input">Senha</h2>
-          <input
-            className="modal-input"
-            type="password"
-            placeholder="*********"
-            onChange={({ target }) => {
-              setPassword(target.value);
-            }}
-          />
+    <div className="modal-container">
+      <h1 className="modal-title">Login</h1>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleLogin(email, password);
+        }}
+      >
+        <h2 className="title_input">Email</h2>
+        <input
+          className="modal-input"
+          type="text"
+          placeholder="Digite seu email"
+          id="loginEmail"
+          onChange={({ target }) => {
+            setEmail(target.value);
+          }}
+        />
+        <h2 className="title_input">Senha</h2>
+        <input
+          className="modal-input"
+          type="password"
+          placeholder="*********"
+          onChange={({ target }) => {
+            setPassword(target.value);
+          }}
+        />
 
-          <div className="options-login">
-            <button
-              className="modal-button"
-              onClick={(e) => {
-                e.preventDefault();
-                handleLogin(email, password);
-              }}
-            >
-              Entrar
-            </button>
+        <div className="options-login">
+          <input type="submit" value="Entrar" className="modal-button" />
 
-            <label className="label-options">Não possui uma conta?</label>
+          <label className="label-options">
+            Não possui uma conta?{" "}
             <Link to="/register" className="link">
               Criar conta
             </Link>
-            <div className="loginGoogle">
-              <button
-                className="btnGoogle"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleSignInGoogle();
-                }}
-              >
-                <FaGoogle style={{ marginRight: "5px" }} /> Entrar com Google
-              </button>
-            </div>
+          </label>
+
+          <div className="loginGoogle">
+            <button
+              className="btnGoogle"
+              onClick={(e) => {
+                e.preventDefault();
+                handleSignInGoogle();
+              }}
+            >
+              <FaGoogle style={{ marginRight: "5px" }} /> Entrar com Google
+            </button>
           </div>
-        </form>
-        <img
-          className="modal-logo"
-          src="../img/logo-sem-fundo.png"
-          alt="Logo"
-        />
-      </div>
+        </div>
+      </form>
     </div>
   );
 };

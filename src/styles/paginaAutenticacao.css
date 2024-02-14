@@ -68,11 +68,7 @@ h2 {
   background-color: #0056b3;
 }
 
-.modal-logo {
-  width: 30%;
-  margin-top: auto;
-  opacity: 50%;
-}
+
 
 .checkbox-login {
   display: flex;
@@ -105,19 +101,6 @@ h2 {
 
 .label-options {
   padding-bottom: 10px;
-}
-
-.telaTotal,
-.imagemDeFundo,
-.imagemDeFundo > img {
-  overflow: hidden;
-  height: 100dvh;
-}
-
-.imagemDeFundo > img {
-  background-size: contain;
-  object-fit: cover;
-  width: 100%;
 }
 
 .btnGoogle {

@@ -6,14 +6,29 @@ import Movies from "./pages/Movies";
 import Series from "./pages/Series";
 import NotFound from "./pages/NotFound.jsx";
 import { Header } from "./components/header/header.jsx";
+import AuthUser from "./pages/AuthUser";
 
 const App = () => {
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/register" element={<Cadastro />} />
+          <Route
+            path="/"
+            element={
+              <AuthUser headerTitle="Login">
+                <Login />
+              </AuthUser>
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <AuthUser headerTitle="Cadastro">
+                <Cadastro />
+              </AuthUser>
+            }
+          />
 
           <Route element={<Header />}>
             <Route path="/home" element={<Home />} />

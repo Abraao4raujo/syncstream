@@ -3,9 +3,105 @@ import { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../../adapters/firebaseConfig";
 import "../../styles/header.css";
-import { readHasRoom } from "../../adapters/readData";
-import CriarSala from "../Room/CriarSala";
-import CreatedRoom from "../Room/SalaCriada";
+import Modal from "../Modal/Modal";
+import styled from "styled-components";
+import { database as db } from "../../adapters/firebaseConfig";
+import { v4 as uuidv4 } from "uuid";
+import { child, get, ref, set } from "firebase/database";
+import { HiUserGroup } from "react-icons/hi";
+const dbRef = ref(db);
+
+const DivModal = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+`;
+
+const TitleModal = styled.h2`
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: white;
+  list-style: none;
+  font-family: system-ui;
+`;
+
+const HeaderModal = styled.div`
+  width: 90%;
+  margin-bottom: 15px;
+`;
+
+const FormModal = styled.div`
+  margin: auto;
+  color: #fff;
+  padding: 30px;
+  background-color: #333;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Input = styled.input`
+  margin-bottom: 15px;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+`;
+const Label = styled.label`
+  color: #fff;
+  cursor: pointer;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont;
+  font-size: 1rem;
+  &:hover {
+    color: #007bff;
+  }
+`;
+const LabelCode = styled.label`
+  color: #777;
+  cursor: pointer;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont;
+  font-size: 1rem;
+  padding: 10px;
+  background-color: #fff;
+`;
+const Select = styled.select`
+  margin-bottom: 15px;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+`;
+const ListUser = styled.li`
+  cursor: pointer;
+  padding: 5px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont;
+  margin: 10px;
+  background-color: #444;
+  border-radius: 4px;
+  list-style: none;
+`;
+const ListsUser = styled.ul`
+  overflow-y: auto;
+  max-height: 165px;
+`;
+
+const Button = styled.button`
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  outline: none;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
 
 export const Header = () => {
   const [salaCriada, setSalaCriada] = useState(false);
@@ -13,22 +109,45 @@ export const Header = () => {
   const [showRoom, setShowRoom] = useState(false);
   const [btnSignOut, setBtnSignOut] = useState(false);
   const [nomeSala, setNomeSala] = useState();
-  const [userHasRoom, setUserHasRoom] = useState(false);
-  const [dataUser, setDataUser] = useState();
+  const [maxGuest, setMaxGuest] = useState(5);
+  const [showSearchRoom, setShowSearchRoom] = useState(false);
+  const [dataRoom, setDataRoom] = useState();
+  const [allRooms, setAllRooms] = useState();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setSalaCriada(true);
+    setShowModal(false);
+  };
+
+  function writeRoomData() {
+    set(ref(db, `Rooms/${nomeSala}`), {
+      code: uuidv4(),
+      guests: [nomeSala],
+      maxGuest: maxGuest,
+      own: nomeSala,
+    });
+    readRoom();
+  }
+
+  function readAllRooms() {
+    const snapshot = get(child(dbRef, `Rooms/`));
+    snapshot.then((e) => {
+      setAllRooms(e.val());
+    });
+  }
+
+  function readRoom() {
+    const snapshot = get(child(dbRef, `Rooms/${nomeSala}`));
+    snapshot.then((e) => {
+      setDataRoom(e.val());
+    });
+  }
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        readHasRoom(user.uid).then((response) => {
-          if (response !== null) {
-            // Verifica se response não é null
-            if (response.room && response.room.hasRoom !== null) {
-              setUserHasRoom(true);
-              setSalaCriada(true);
-              setNomeSala(response.username);
-            }
-          }
-        });
+        setNomeSala(user.displayName);
         setBtnSignOut(true);
       }
     });
@@ -48,11 +167,16 @@ export const Header = () => {
         <Link to="/movies">FILMES</Link>
 
         {salaCriada ? (
-          <Link onClick={() => setShowRoom(true)}>
+          <Link
+            onClick={() => {
+              setShowRoom(!showRoom);
+              readRoom();
+            }}
+          >
             SALA DE {nomeSala && nomeSala}
           </Link>
         ) : (
-          <Link onClick={() => setShowModal(true)}>CRIAR SALA</Link>
+          <Link onClick={() => setShowModal(!showModal)}>CRIAR SALA</Link>
         )}
 
         {btnSignOut && (
@@ -67,15 +191,103 @@ export const Header = () => {
         )}
       </nav>
 
+      {/* MODAL DE CRIAR SALA*/}
       {showModal && (
-        <CriarSala
-          setSalaCriada={setSalaCriada}
-          setShowModal={setShowModal}
-          setNomeSala={setNomeSala}
-          username={nomeSala}
-        />
+        <Modal>
+          <HeaderModal>
+            <DivModal>
+              <TitleModal>Criar sala</TitleModal>
+            </DivModal>
+          </HeaderModal>
+          <Label
+            onClick={() => {
+              setShowSearchRoom(true);
+              setShowModal(false);
+              readAllRooms();
+            }}
+          >
+            Procurar Sala
+          </Label>
+          <FormModal>
+            <Form onSubmit={handleSubmit}>
+              <Input
+                type="text"
+                placeholder="Nome da Sala"
+                value={nomeSala}
+                disabled
+              />
+
+              <Select
+                name="group"
+                onClick={(e) => {
+                  setMaxGuest(e.target.value);
+                }}
+              >
+                <option value="5">5</option>
+                <option value="7">7</option>
+                <option value="10">10</option>
+              </Select>
+              <Button
+                type="submit"
+                onClick={() => {
+                  writeRoomData();
+                }}
+              >
+                Criar Sala
+              </Button>
+            </Form>
+          </FormModal>
+        </Modal>
       )}
-      {showRoom && <CreatedRoom username={nomeSala} />}
+
+      {/* MODAL DA SALA CRIADA */}
+      {showRoom && (
+        <Modal>
+          <HeaderModal>
+            <DivModal>
+              <TitleModal>Sala de {nomeSala}</TitleModal>
+            </DivModal>
+          </HeaderModal>
+          <ul style={{ color: "white" }}>
+            {Object.values(dataRoom.guests).map((key) => (
+              <li>{key}</li>
+            ))}
+          </ul>
+
+          <LabelCode>{dataRoom.code}</LabelCode>
+        </Modal>
+      )}
+
+      {/* MODAL DAS SALAS EXISTENTES */}
+      {showSearchRoom && (
+        <Modal>
+          <HeaderModal>
+            <DivModal>
+              <TitleModal>Salas Existentes</TitleModal>
+            </DivModal>
+          </HeaderModal>
+
+          <Input type="text" name="codigo-sala" placeholder="Procurar sala" />
+          <ListsUser style={{ color: "white" }}>
+            {allRooms &&
+              Object.entries(allRooms).map((key) => (
+                <ListUser>
+                  Sala de {key[0]} {<HiUserGroup />}
+                  {key[1].guests.length + "/" + key[1].maxGuest}
+                </ListUser>
+              ))}
+          </ListsUser>
+          <Label
+            onClick={() => {
+              setShowSearchRoom(false);
+              setShowModal(true);
+            }}
+          >
+            Voltar para o inicio
+          </Label>
+        </Modal>
+      )}
+
       <Outlet />
     </div>
   );
