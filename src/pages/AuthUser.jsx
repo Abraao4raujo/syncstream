@@ -21,9 +21,13 @@ const AuthUser = ({ children }) => {
     <div>
       {children}
 
-      <Img className="modal-logo" src="/img/logoSemFundo.png" alt="Logo" />
+      <Img
+        className="modal-logo"
+        src="./src/assets/logoSemFundo.png"
+        alt="Logo"
+      />
       <div className="imagemDeFundo">
-        <BgImage src="/img/capas-de-filmes.png" alt="imagem de fundo" />
+        <BgImage src="./src/assets/capas-de-filmes.png" alt="imagem de fundo" />
       </div>
     </div>
   );
