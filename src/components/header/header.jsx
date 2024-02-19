@@ -1,14 +1,14 @@
 import { Link, Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { auth } from "../../adapters/firebaseConfig";
+import { database as db, auth } from "../../adapters/firebaseConfig";
+import { child, get, onValue, ref, set } from "firebase/database";
 import "../../styles/header.css";
 import Modal from "../Modal/Modal";
 import styled from "styled-components";
-import { database as db } from "../../adapters/firebaseConfig";
 import { v4 as uuidv4 } from "uuid";
-import { child, get, ref, set } from "firebase/database";
 import { HiUserGroup } from "react-icons/hi";
+
 const dbRef = ref(db);
 
 const DivModal = styled.div`
@@ -109,6 +109,7 @@ export const Header = () => {
   const [showRoom, setShowRoom] = useState(false);
   const [btnSignOut, setBtnSignOut] = useState(false);
   const [nomeSala, setNomeSala] = useState();
+  const [nomeUsuario, setNomeUsuario] = useState();
   const [maxGuest, setMaxGuest] = useState(5);
   const [showSearchRoom, setShowSearchRoom] = useState(false);
   const [dataRoom, setDataRoom] = useState();
@@ -130,13 +131,38 @@ export const Header = () => {
     readRoom();
   }
 
+  function readUserInRooms(donoSala) {
+    const guestsRef = ref(db, `Rooms/${donoSala}/guests/`);
+
+    get(guestsRef).then((snapshot) => {
+      const existingUsers = snapshot.val() || [];
+      existingUsers.push(nomeSala);
+
+      set(guestsRef, existingUsers)
+        .then(() => {
+          console.log(`${nomeSala} adicionado na sala de ${donoSala}`);
+          readRoomUser(donoSala);
+          setShowSearchRoom(false);
+          setShowRoom(true);
+        })
+        .catch((error) =>
+          console.log(`Não foi possivel entrar na sala. Error: ${error}`)
+        );
+    });
+  }
+
   function readAllRooms() {
     const snapshot = get(child(dbRef, `Rooms/`));
     snapshot.then((e) => {
       setAllRooms(e.val());
     });
   }
-
+  function readRoomUser(donoSala) {
+    const snapshot = get(child(dbRef, `Rooms/${donoSala}`));
+    snapshot.then((e) => {
+      setDataRoom(e.val());
+    });
+  }
   function readRoom() {
     const snapshot = get(child(dbRef, `Rooms/${nomeSala}`));
     snapshot.then((e) => {
@@ -144,10 +170,26 @@ export const Header = () => {
     });
   }
 
+  function exitRoom() {
+    const dbRefPath = ref(db, `Rooms/${nomeSala}/guests/`);
+
+    onValue(dbRefPath, (snapshot) => {
+      snapshot.forEach((childSnapshot) => {
+        let childKey = childSnapshot.key;
+        let childData = childSnapshot.val();
+        console.log(childKey);
+        if (childData === nomeUsuario)
+          set(ref(db, `Rooms/${nomeSala}/guests/${childKey}`), null);
+        setShowRoom(false);
+      });
+    });
+  }
+
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setNomeSala(user.displayName);
+        setNomeUsuario(user.displayName);
         setBtnSignOut(true);
       }
     });
@@ -241,7 +283,7 @@ export const Header = () => {
       )}
 
       {/* MODAL DA SALA CRIADA */}
-      {showRoom && (
+      {showRoom && dataRoom && (
         <Modal>
           <HeaderModal>
             <DivModal>
@@ -250,11 +292,12 @@ export const Header = () => {
           </HeaderModal>
           <ul style={{ color: "white" }}>
             {Object.values(dataRoom.guests).map((key) => (
-              <li>{key}</li>
+              <li key={key}>{key}</li>
             ))}
           </ul>
 
           <LabelCode>{dataRoom.code}</LabelCode>
+          <Label onClick={exitRoom}>Sair da sala</Label>
         </Modal>
       )}
 
@@ -266,14 +309,20 @@ export const Header = () => {
               <TitleModal>Salas Existentes</TitleModal>
             </DivModal>
           </HeaderModal>
-
-          <Input type="text" name="codigo-sala" placeholder="Procurar sala" />
           <ListsUser style={{ color: "white" }}>
             {allRooms &&
               Object.entries(allRooms).map((key) => (
-                <ListUser>
+                <ListUser
+                  key={key[0]}
+                  onClick={() => {
+                    readUserInRooms(key[1].own);
+                    setNomeSala(key[1].own);
+                  }}
+                >
                   Sala de {key[0]} {<HiUserGroup />}
-                  {key[1].guests.length + "/" + key[1].maxGuest}
+                  {key[1].guests &&
+                    key[1].guests.length &&
+                    key[1].guests.length + "/" + key[1].maxGuest}
                 </ListUser>
               ))}
           </ListsUser>

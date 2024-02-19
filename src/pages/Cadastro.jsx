@@ -1,18 +1,13 @@
 import "../styles/paginaAutenticacao.css";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { auth } from "../adapters/firebaseConfig";
-import {
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  updateProfile,
-} from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
 const Cadastro = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [refreshPage, setRefreshPage] = useState();
 
   // cadastrar usuario
   function handleRegister(username, email, password) {
@@ -25,9 +20,6 @@ const Cadastro = () => {
         const errorMessage = error.message;
         console.log(errorMessage);
         alert("Não foi possivel cadastrar o usuário");
-      })
-      .finally(() => {
-        setRefreshPage(true);
       });
   }
 

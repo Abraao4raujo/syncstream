@@ -8,11 +8,7 @@ const Series = () => {
     }&language=pt-BR&page=1`
   );
 
-  return (
-    <>
-      <VerticalCards dataAPI={data} />
-    </>
-  );
+  return <VerticalCards dataAPI={data} />;
 };
 
 export default Series;
