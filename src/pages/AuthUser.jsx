@@ -20,13 +20,10 @@ const AuthUser = ({ children }) => {
   return (
     <div>
       {children}
-      <Img
-        className="modal-logo"
-        src="../assets/logo-sem-fundo.png"
-        alt="Logo"
-      />
+
+      <Img className="modal-logo" src="/img/logoSemFundo.png" alt="Logo" />
       <div className="imagemDeFundo">
-        <BgImage src="../assets/capas-de-filmes.png" alt="imagem de fundo" />
+        <BgImage src="/img/capas-de-filmes.png" alt="imagem de fundo" />
       </div>
     </div>
   );
