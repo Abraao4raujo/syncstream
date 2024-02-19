@@ -1,5 +1,8 @@
 import React from "react";
 import styled from "styled-components";
+import BgImageSrc from "../assets/capas-de-filmes.png";
+import LogoSrc from "../assets/logoSemFundo.png";
+
 const Img = styled.img`
   width: 100px;
   margin-top: auto;
@@ -21,13 +24,9 @@ const AuthUser = ({ children }) => {
     <div>
       {children}
 
-      <Img
-        className="modal-logo"
-        src="./src/assets/logoSemFundo.png"
-        alt="Logo"
-      />
+      <Img className="modal-logo" src={LogoSrc} alt="Logo" />
       <div className="imagemDeFundo">
-        <BgImage src="./src/assets/capas-de-filmes.png" alt="imagem de fundo" />
+        <BgImage src={BgImageSrc} alt="imagem de fundo" />
       </div>
     </div>
   );
