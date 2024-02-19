@@ -22,14 +22,11 @@ const AuthUser = ({ children }) => {
       {children}
       <Img
         className="modal-logo"
-        src="../../public/img/logo-sem-fundo.png"
+        src="../../assets/logo-sem-fundo.png"
         alt="Logo"
       />
       <div className="imagemDeFundo">
-        <BgImage
-          src="../../public/img/capas-de-filmes.png"
-          alt="imagem de fundo"
-        />
+        <BgImage src="../../assets/capas-de-filmes.png" alt="imagem de fundo" />
       </div>
     </div>
   );
