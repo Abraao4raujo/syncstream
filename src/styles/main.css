@@ -92,3 +92,12 @@
   font-family: "Bebas Neue", sans-serif;
   font-size: 1rem;
 }
+
+.navLink {
+  font-family: "Bebas Neue", sans-serif;
+  color: white;
+  text-decoration: none;
+  letter-spacing: 2px;
+  margin-left: 30px;
+  font-size: 1.5rem;
+}

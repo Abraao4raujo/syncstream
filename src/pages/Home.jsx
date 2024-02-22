@@ -7,14 +7,6 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../adapters/firebaseConfig";
 
 const Home = () => {
-  // verifica se o usuario ainda está conectado
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user === null) {
-        window.location.href = "/";
-      }
-    });
-  }, []);
 
   const data = useFetch(
     `https://api.themoviedb.org/3/movie/popular?api_key=${

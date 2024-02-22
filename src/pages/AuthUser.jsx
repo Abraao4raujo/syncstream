@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import BgImageSrc from "../assets/capas-de-filmes.png";
-import LogoSrc from "../assets/logoSemFundo.png";
+import bgImageSrc from "../../public/capaFilmes.png";
+import logoSemFundo from "../../public/logoSemFundo.png";
+import { Outlet } from "react-router-dom";
 
 const Img = styled.img`
   width: 100px;
@@ -19,14 +20,13 @@ const BgImage = styled.img`
   object-fit: cover;
   width: 100%;
 `;
-const AuthUser = ({ children }) => {
+const AuthUser = () => {
   return (
     <div>
-      {children}
-
-      <Img className="modal-logo" src={LogoSrc} alt="Logo" />
+      <Outlet />
+      <Img className="modal-logo" src={logoSemFundo} alt="Logo" />
       <div className="imagemDeFundo">
-        <BgImage src={BgImageSrc} alt="imagem de fundo" />
+        <BgImage src={bgImageSrc} alt="imagem de fundo" />
       </div>
     </div>
   );
