@@ -1,9 +1,11 @@
-import { Outlet } from "react-router-dom";
 import styled from "styled-components";
+import { FaUsers } from "react-icons/fa";
 
 const DivModal = styled.div`
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-around;
+  align-items: center;
+  cursor: pointer;
 `;
 
 const TitleModal = styled.h2`
@@ -26,6 +28,9 @@ const Modal = ({ header, main, footer }) => {
       <HeaderModal>
         <DivModal>
           <TitleModal>{header}</TitleModal>
+          {header == "Salas Existentes" ? null : (
+            <FaUsers style={{ fontSize: "1.8rem", color: "#fff" }} />
+          )}
         </DivModal>
       </HeaderModal>
       {main}
