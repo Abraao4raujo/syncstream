@@ -8,6 +8,7 @@ import { HiUserGroup } from "react-icons/hi";
 import { database as db, auth } from "../../../adapters/firebaseConfig";
 import Modal from "../../../components/Modal/Modal";
 const dbRef = ref(db);
+import { IoSend } from "react-icons/io5";
 
 const HeaderDiv = styled.div`
   width: 100%;
@@ -58,34 +59,84 @@ const Nav = styled.nav`
   z-index: 1;
 `;
 
-const LinkNav = styled.a`
-  font-size: 1.5rem;
-  font-family: "Bebas Neue", sans-serif;
-  color: white;
-  text-decoration: none;
-  letter-spacing: 2px;
-  margin-left: 50px;
+const ListsMessage = styled.ul`
+  color: #333;
+  background-color: #d9d9d9;
+  list-style: none;
+  padding: 15px;
+  width: 290px;
+  height: 180px;
+  overflow-y: auto;
+`;
 
-  &:hover {
-    color: rgb(0, 255, 255);
-    transition: ease 0.3s;
-    cursor: pointer;
-  }
+const DivReceiver = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-family: arial;
+`;
+
+const DivSender = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-family: arial;
+`;
+
+const Sender = styled.li`
+  font-size: 0.8rem;
+  font-weight: bold;
+`;
+
+const MessageSender = styled.li`
+  background-color: #999999;
+  max-width: 150px;
+  margin-left: 30px;
+  padding: 5px;
+  border-radius: 10px 1px 10px 10px;
+  display: flex;
+  margin-bottom: 4px;
+`;
+
+const Receiver = styled.li`
+  font-size: 0.8rem;
+  font-weight: bold;
+`;
+
+const MessageReceiver = styled.div`
+  background-color: #999999;
+  max-width: 150px;
+  margin-left: 30px;
+  margin-bottom: 4px;
+  padding: 5px;
+  border-radius: 1px 10px 10px 10px;
+  display: flex;
+`;
+const InputSendMessage = styled.input`
+  color: #333;
+  padding: 8px;
+  width: 270px;
+  border: none;
+`;
+const DivSendMessage = styled.div`
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 export const Header = () => {
   const [isConnected, setIsConnected] = useState(false);
-  const [salaCriada, setSalaCriada] = useState(false);
   const [showRoom, setShowRoom] = useState(false);
   const [nomeSala, setNomeSala] = useState();
   const [nomeUsuario, setNomeUsuario] = useState();
-  const [maxGuest, setMaxGuest] = useState(5);
   const [showSearchRoom, setShowSearchRoom] = useState(false);
   const [dataRoom, setDataRoom] = useState();
   const [nameRooms, setNameRooms] = useState([]);
-  const [dataRooms, setDataRooms] = useState();
   const [isJoinedRoom, setIsJoinedRoom] = useState(false);
   const [donoSala, setDonoSala] = useState();
+  const [message, setMessage] = useState();
+  const [messageSended, setMessageSended] = useState();
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -106,6 +157,15 @@ export const Header = () => {
         roomsArray.push(childKey);
       });
       setNameRooms(roomsArray);
+    });
+  }, []);
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setNomeSala(user.displayName);
+        setNomeUsuario(user.displayName);
+      }
     });
   }, []);
 
@@ -136,9 +196,7 @@ export const Header = () => {
     get(guestsRef).then((snapshot) => {
       const existingUsers = snapshot.val();
       if (existingUsers) {
-        
-
-  existingUsers.splice(existingUsers.indexOf(nomeSala), 1)
+        existingUsers.splice(existingUsers.indexOf(nomeSala), 1);
       }
 
       set(guestsRef, existingUsers)
@@ -154,12 +212,30 @@ export const Header = () => {
     });
   }
 
+  function sendMessage() {
+    const guestsRef = ref(db, `Rooms/${donoSala}/chats/`);
+    get(guestsRef).then((snapshot) => {
+      const existingMessage = snapshot.val() || [];
+      existingMessage[nomeUsuario] = message;
+
+      set(guestsRef, existingMessage)
+        .then(() => {
+          setMessage("");
+        })
+        .catch((error) =>
+          console.log(`Não foi possivel enviar a mensagem. Error: ${error}`)
+        );
+    });
+  }
+
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setNomeSala(user.displayName);
-        setNomeUsuario(user.displayName);
-      }
+    const guestsRef = ref(db, `Rooms/${donoSala}/chats/`);
+
+    get(guestsRef).then((snapshot) => {
+      const existingMessage = snapshot.val() || [];
+      Object.entries(existingMessage).map((message) =>
+        setMessageSended(message)
+      );
     });
   }, []);
 
@@ -239,30 +315,6 @@ export const Header = () => {
         )}
       </Nav>
 
-      {/* MODAL DE QUANDO O USUARIO ENTRAR EM UMA SALA */}
-      {showRoom && (
-        <Modal
-          header={`Sala de ${nomeSala}`}
-          main={
-            <ul
-              style={{
-                color: "white",
-              }}
-            >
-              {dataRoom.map((key, index) => (
-                <li key={index}>{key}</li>
-              ))}
-            </ul>
-          }
-          footer={
-            <>
-              {/* <LabelCode>{dataRoom.code}</LabelCode> */}
-              <Label onClick={exitRoom}>Sair da sala</Label>
-            </>
-          }
-        />
-      )}
-
       {/* MODAL DAS SALAS EXISTENTES */}
       {showSearchRoom && (
         <Modal
@@ -301,6 +353,67 @@ export const Header = () => {
           }
         ></Modal>
       )}
+
+      {/* MODAL DE QUANDO O USUARIO ENTRAR EM UMA SALA */}
+      {showRoom && (
+        <Modal
+          header={`Sala de ${donoSala}`}
+          main={
+            <div>
+              <ListsMessage>
+                {/* {messageSended && messageSended === nomeUsuario && (
+                  <DivSender>
+                    <Sender>You</Sender>
+                    {messageSended.map((msg) => (
+                      <MessageSender>{msg}</MessageSender>
+                    ))}
+                  </DivSender>
+                )} */}
+                <DivReceiver>
+                  <Receiver>Abraao4raujo</Receiver>
+                  <MessageReceiver>Ola mundo</MessageReceiver>
+                </DivReceiver>
+                <DivSender>
+                  <Sender>You</Sender>
+                  <MessageSender>
+                    Iae meu patrão, tudo bem com você?
+                  </MessageSender>
+                </DivSender>
+              </ListsMessage>
+              <DivSendMessage>
+                <InputSendMessage
+                  onChange={(e) => {
+                    setMessage(e.target.value);
+                  }}
+                />
+                <IoSend
+                  style={{
+                    color: "#fff",
+                    fontSize: "1.4rem",
+                    background: "blue",
+                    width: "34px",
+                    height: "31px",
+                    borderRadius: "0px 0px 10px 0px",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => sendMessage()}
+                />
+              </DivSendMessage>
+            </div>
+          }
+          footer={<Label onClick={exitRoom}>Sair da sala</Label>}
+        />
+      )}
     </HeaderDiv>
   );
 };
+
+// FUNCIONALIDADE QUE MOSTRA OS USUARIOS ONLINES
+// {dataRoom.map((key, index) => (
+//                 <li
+//                   key={index}
+//                   style={{ fontFamily: "Arial", fontWeight: "bold" }}
+//                 >
+//                   {key}
+//                 </li>
+//               ))}
