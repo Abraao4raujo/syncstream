@@ -1,5 +1,5 @@
 import { Outlet, Link, NavLink } from "react-router-dom";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { child, get, onValue, ref, set } from "firebase/database";
 import styled from "styled-components";
@@ -137,6 +137,9 @@ export const Header = () => {
   const [donoSala, setDonoSala] = useState();
   const [message, setMessage] = useState();
   const [messageSended, setMessageSended] = useState();
+  const [yourMessage, setYourMessage] = useState();
+  const [theirMessages, setTheirMessages] = useState();
+  const [allMessages, setAllMessages] = useState();
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -174,6 +177,7 @@ export const Header = () => {
 
     get(guestsRef).then((snapshot) => {
       const existingUsers = snapshot.val() || [];
+
       existingUsers.push(nomeSala);
 
       set(guestsRef, existingUsers)
@@ -214,9 +218,15 @@ export const Header = () => {
 
   function sendMessage() {
     const guestsRef = ref(db, `Rooms/${donoSala}/chats/`);
+
     get(guestsRef).then((snapshot) => {
-      const existingMessage = snapshot.val() || [];
-      existingMessage[nomeUsuario] = message;
+      const existingMessage = snapshot.val() || {};
+
+      if (!Array.isArray(existingMessage[nomeUsuario])) {
+        existingMessage[nomeUsuario] = [];
+      }
+
+      existingMessage[nomeUsuario].push(message);
 
       set(guestsRef, existingMessage)
         .then(() => {
@@ -233,11 +243,22 @@ export const Header = () => {
 
     get(guestsRef).then((snapshot) => {
       const existingMessage = snapshot.val() || [];
-      Object.entries(existingMessage).map((message) =>
-        setMessageSended(message)
-      );
+
+      setAllMessages(existingMessage);
+      Object.entries(existingMessage).map((message) => {
+        setMessageSended(message);
+      });
     });
-  }, []);
+  }, [message]);
+
+  useEffect(() => {
+    const guestsRef = ref(db, `Rooms/${donoSala}/chats/${nomeUsuario}`);
+
+    get(guestsRef).then((snapshot) => {
+      const existingMessage = snapshot.val() || [];
+      setYourMessage(Object.values(existingMessage));
+    });
+  }, [message]);
 
   return (
     <HeaderDiv>
@@ -361,24 +382,25 @@ export const Header = () => {
           main={
             <div>
               <ListsMessage>
-                {/* {messageSended && messageSended === nomeUsuario && (
-                  <DivSender>
-                    <Sender>You</Sender>
-                    {messageSended.map((msg) => (
-                      <MessageSender>{msg}</MessageSender>
-                    ))}
-                  </DivSender>
-                )} */}
-                <DivReceiver>
-                  <Receiver>Abraao4raujo</Receiver>
-                  <MessageReceiver>Ola mundo</MessageReceiver>
-                </DivReceiver>
-                <DivSender>
-                  <Sender>You</Sender>
-                  <MessageSender>
-                    Iae meu patrão, tudo bem com você?
-                  </MessageSender>
-                </DivSender>
+                {Object.entries(allMessages).map(([user, messages]) => (
+                  <React.Fragment key={user}>
+                    {user === nomeUsuario ? (
+                      messages.map((msg, index) => (
+                        <DivSender>
+                          <Sender>You</Sender>
+                          <MessageSender key={index}>{msg}</MessageSender>
+                        </DivSender>
+                      ))
+                    ) : (
+                      <DivReceiver>
+                        <Receiver>{user}</Receiver>
+                        {messages.map((msg, index) => (
+                          <MessageReceiver key={index}>{msg}</MessageReceiver>
+                        ))}
+                      </DivReceiver>
+                    )}
+                  </React.Fragment>
+                ))}
               </ListsMessage>
               <DivSendMessage>
                 <InputSendMessage
