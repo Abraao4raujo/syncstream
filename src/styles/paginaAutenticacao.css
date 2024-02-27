@@ -68,8 +68,6 @@ h2 {
   background-color: #0056b3;
 }
 
-
-
 .checkbox-login {
   display: flex;
   font-size: 15px;
@@ -113,4 +111,22 @@ h2 {
   margin-top: 20px;
   font-size: 18px;
   cursor: pointer;
+}
+
+@media screen and (max-width: 750px) {
+  .modal-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: initial;
+    height: 100dvh;
+    background-color: #fff;
+    width: auto;
+    flex-direction: column;
+    padding-bottom: 0px;
+    padding-top: 0px;
+  }
+  .imagemDeFundo {
+    display: none;
+  }
 }
