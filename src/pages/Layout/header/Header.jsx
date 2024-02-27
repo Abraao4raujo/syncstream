@@ -96,6 +96,7 @@ const MessageSender = styled.li`
   border-radius: 10px 1px 10px 10px;
   display: flex;
   margin-bottom: 4px;
+  margin-right: 10px;
 `;
 
 const Receiver = styled.li`
@@ -106,7 +107,7 @@ const Receiver = styled.li`
 const MessageReceiver = styled.div`
   background-color: #999999;
   max-width: 150px;
-  margin-left: 30px;
+  margin-left: 10px;
   margin-bottom: 4px;
   padding: 5px;
   border-radius: 1px 10px 10px 10px;
@@ -386,8 +387,8 @@ export const Header = () => {
                   <React.Fragment key={user}>
                     {user === nomeUsuario ? (
                       messages.map((msg, index) => (
-                        <DivSender>
-                          <Sender>You</Sender>
+                        <DivSender key={index}>
+                          <Sender >You</Sender>
                           <MessageSender key={index}>{msg}</MessageSender>
                         </DivSender>
                       ))
