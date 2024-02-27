@@ -1,14 +1,13 @@
-import { Outlet, Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { child, get, onValue, ref, set } from "firebase/database";
 import styled from "styled-components";
-import { v4 as uuidv4 } from "uuid";
-import { HiUserGroup } from "react-icons/hi";
 import { database as db, auth } from "../../../adapters/firebaseConfig";
 import Modal from "../../../components/Modal/Modal";
 const dbRef = ref(db);
 import { IoSend } from "react-icons/io5";
+import { RxHamburgerMenu } from "react-icons/rx";
 
 const HeaderDiv = styled.div`
   width: 100%;
@@ -25,14 +24,6 @@ const Label = styled.label`
     color: #007bff;
   }
 `;
-const LabelCode = styled.label`
-  color: #777;
-  cursor: pointer;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont;
-  font-size: 1rem;
-  padding: 10px;
-  background-color: #fff;
-`;
 
 const ListUser = styled.li`
   cursor: pointer;
@@ -43,6 +34,7 @@ const ListUser = styled.li`
   border-radius: 4px;
   list-style: none;
 `;
+
 const ListsUser = styled.ul`
   overflow-y: auto;
   max-height: 165px;
@@ -57,6 +49,22 @@ const Nav = styled.nav`
   height: 65px;
   background: linear-gradient(#222, transparent);
   z-index: 1;
+  @media (max-width: 700px) {
+    justify-content: space-between;
+  }
+`;
+
+const NavOptions = styled.div`
+  @media (max-width: 700px) {
+    display: none;
+  }
+`;
+
+const OptionMenu = styled.div`
+  display: none;
+  @media (max-width: 700px) {
+    display: block;
+  }
 `;
 
 const ListsMessage = styled.ul`
@@ -277,64 +285,76 @@ export const Header = () => {
         >
           SYNCSTREAM
         </NavLink>
-        <NavLink
-          className="navLink"
-          to={isConnected ? "/series" : "/"}
-          style={({ isActive }) => {
-            return {
-              color: isActive ? "rgb(20, 184, 148)" : "#fff",
-            };
-          }}
-        >
-          SÉRIES
-        </NavLink>
-        <NavLink
-          className="navLink"
-          to={isConnected ? "/movies" : "/"}
-          style={({ isActive }) => {
-            return {
-              color: isActive ? "rgb(20, 184, 148)" : "#fff",
-            };
-          }}
-        >
-          FILMES
-        </NavLink>
+        <NavOptions>
+          <NavLink
+            className="navLink"
+            to={isConnected ? "/series" : "/"}
+            style={({ isActive }) => {
+              return {
+                color: isActive ? "rgb(20, 184, 148)" : "#fff",
+              };
+            }}
+          >
+            SÉRIES
+          </NavLink>
+          <NavLink
+            className="navLink"
+            to={isConnected ? "/movies" : "/"}
+            style={({ isActive }) => {
+              return {
+                color: isActive ? "rgb(20, 184, 148)" : "#fff",
+              };
+            }}
+          >
+            FILMES
+          </NavLink>
 
-        {isJoinedRoom ? (
-          <NavLink
-            className="navLink"
-            onClick={() => {
-              setShowRoom(true);
-            }}
-          >
-            Sala de {nomeSala}
-          </NavLink>
-        ) : (
-          // nav para procurar salas existentes
-          <NavLink
-            className="navLink"
-            onClick={() => {
-              isConnected
-                ? setShowSearchRoom(true)
-                : (window.location.href = "/");
-            }}
-          >
-            Procurar salas
-          </NavLink>
-        )}
+          {isJoinedRoom ? (
+            <NavLink
+              className="navLink"
+              onClick={() => {
+                setShowRoom(true);
+              }}
+            >
+              Sala de {nomeSala}
+            </NavLink>
+          ) : (
+            // nav para procurar salas existentes
+            <NavLink
+              className="navLink"
+              onClick={() => {
+                isConnected
+                  ? setShowSearchRoom(true)
+                  : (window.location.href = "/");
+              }}
+            >
+              Procurar salas
+            </NavLink>
+          )}
 
-        {isConnected && (
-          <NavLink
-            className="navLink"
-            onClick={(e) => {
-              e.preventDefault();
-              signOut(auth);
-              setIsConnected(false);
+          {isConnected && (
+            <NavLink
+              className="navLink"
+              onClick={(e) => {
+                e.preventDefault();
+                signOut(auth);
+                setIsConnected(false);
+              }}
+            >
+              Deslogar
+            </NavLink>
+          )}
+        </NavOptions>
+        <OptionMenu>
+          <RxHamburgerMenu
+            style={{
+              color: "#fff",
+              fontSize: "2rem",
+              padding: "10px",
+              cursor: "pointer",
             }}
-          >
-            Deslogar
-          </NavLink>
-        )}
+          />
+        </OptionMenu>
       </Nav>
 
       {/* MODAL DAS SALAS EXISTENTES */}
@@ -388,7 +408,7 @@ export const Header = () => {
                     {user === nomeUsuario ? (
                       messages.map((msg, index) => (
                         <DivSender key={index}>
-                          <Sender >You</Sender>
+                          <Sender>You</Sender>
                           <MessageSender key={index}>{msg}</MessageSender>
                         </DivSender>
                       ))
@@ -405,9 +425,8 @@ export const Header = () => {
               </ListsMessage>
               <DivSendMessage>
                 <InputSendMessage
-                  onChange={(e) => {
-                    setMessage(e.target.value);
-                  }}
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
                 />
                 <IoSend
                   style={{
@@ -419,7 +438,7 @@ export const Header = () => {
                     borderRadius: "0px 0px 10px 0px",
                     cursor: "pointer",
                   }}
-                  onClick={() => sendMessage()}
+                  onClick={sendMessage}
                 />
               </DivSendMessage>
             </div>
