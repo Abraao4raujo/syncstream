@@ -279,7 +279,7 @@ export const Header = () => {
           style={({ isActive }) => {
             return {
               color: isActive ? "rgb(20, 184, 148)" : "#fff",
-              fontSize: "2rem",
+              fontSize: "1.5rem",
             };
           }}
         >
@@ -316,7 +316,7 @@ export const Header = () => {
                 setShowRoom(true);
               }}
             >
-              Sala de {nomeSala}
+              SALA DE {nomeSala}
             </NavLink>
           ) : (
             // nav para procurar salas existentes
@@ -328,7 +328,7 @@ export const Header = () => {
                   : (window.location.href = "/");
               }}
             >
-              Procurar salas
+              SALAS
             </NavLink>
           )}
 
@@ -341,7 +341,7 @@ export const Header = () => {
                 setIsConnected(false);
               }}
             >
-              Deslogar
+              DESCONECTAR
             </NavLink>
           )}
         </NavOptions>

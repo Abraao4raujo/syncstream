@@ -14,19 +14,26 @@ const Card = ({ movie, abrirModalDetails }) => {
   };
 
   return (
-    <>
-      <li className="card" key={movie.id} onClick={abrirModal}>
-        <div className="inf-movie">
-          <img
-            src={`${image_path}${movie.poster_path}`}
-            alt={movie.name || movie.title}
-            className="poster"
-          />
-          <label className="title-movie">{movie.name || movie.title}</label>
-          <label className="overview-movie">{movie.overview}</label>
-        </div>
-      </li>
-    </>
+    <li className="card" key={movie.id} onClick={abrirModal}>
+      <div className="inf-movie">
+        <label className="title-movie">{movie.name || movie.title}</label>
+        <img
+          src={`${image_path}${movie.poster_path}`}
+          alt={movie.name || movie.title}
+          className="poster"
+        />
+
+        <label className="overview-movie">
+          {movie.overview.length < 200
+            ? movie.overview
+                .slice(0, movie.overview.length - 3)
+                .padEnd(movie.overview.length, ".")
+            : movie.overview
+                .slice(0, movie.overview.length / 3)
+                .padEnd(movie.overview.length / 3 + 3, ".")}
+        </label>
+      </div>
+    </li>
   );
 };
 

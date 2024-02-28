@@ -37,11 +37,6 @@ const HorizontalCards = (dataAPI) => {
     <>
       {conteudo && <Details infApi={conteudo} setConteudo={setConteudo} />}
       <div className="container-cards">
-        <ul className="movie-list">
-          <li onClick={decreaseNumber}>{"<"}</li>
-          <li onClick={increaseNumber}>{">"}</li>
-        </ul>
-
         <ul className="cards">
           {dataAPI.dataAPI.map((item, index) => (
             <Card
