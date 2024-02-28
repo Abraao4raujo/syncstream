@@ -1,5 +1,5 @@
 import useFetch from "../adapters/useFetch";
-import VerticalCards from "../components/cards/VerticalCards.jsx";
+import HorizontalCards from "../components/cards/HorizontalCards.jsx";
 
 const Series = () => {
   const data = useFetch(
@@ -8,7 +8,7 @@ const Series = () => {
     }&language=pt-BR&page=1`
   );
 
-  return <VerticalCards dataAPI={data} />;
+  return <HorizontalCards dataAPI={data} />;
 };
 
 export default Series;

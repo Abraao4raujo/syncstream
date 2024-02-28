@@ -1,17 +1,21 @@
 @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Roboto&display=swap");
 
 .card {
-  min-width: 260px;
+  max-width: 300px;
   height: auto;
-  margin-left: 30px;
+  /* margin-left: 30px; */
   display: flex;
   position: relative;
   display: inline-block;
+  transition: transform 1s ease;
 }
 
 .poster {
-  max-width: 100%;
+  max-width: 250px;
+  height: 400px;
+  padding: 10px;
   transition: transform 0.3s, opacity 0.3s;
+  border-radius: 15px;
 }
 
 .play {
@@ -27,18 +31,18 @@
 
 .inf-movie:hover .poster,
 .play-container:hover .poster {
-  transform: scale(1.1);
+  transform: scale(1.05);
   opacity: 0.5;
 }
 
 .inf-movie {
-  position: relative;
-  overflow: hidden;
+  display: flex;
+  justify-content: center;
 }
 
 .inf-movie:hover label {
   opacity: 1;
-  transform: translateY(-50%);
+  transform: translateY(-15%);
   transition: opacity 0.3s, transform 0.3s;
 }
 
@@ -52,20 +56,21 @@
 .overview-movie {
   position: absolute;
   color: white;
-  font-family: "Roboto", sans-serif;
+  font-family: "Inter", sans-serif;
   opacity: 0;
 }
 
 .title-movie {
-  top: 10%;
-  left: 38%;
-  font-size: 18px;
-  font-weight: bold;
+  top: 15px;
+  left: 35px;
+  z-index: 1;
+  margin: auto;
+  max-width: 250px;
 }
 
 .overview-movie {
-  top: 55%;
-  left: 5%;
-  font-size: 14px;
-  text-align: left;
+  bottom: 15px;
+  text-align: justify;
+  font-size: 1rem;
+  max-width: 220px;
 }

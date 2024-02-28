@@ -4,6 +4,8 @@
   align-items: center;
   overflow-x: hidden;
   overflow-y: hidden;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .container-cards {
@@ -26,8 +28,4 @@
 
 .container-cards {
   overflow: hidden;
-}
-
-.card {
-  transition: transform 1s ease;
 }
