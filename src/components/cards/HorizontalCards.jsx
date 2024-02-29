@@ -7,8 +7,8 @@ const HorizontalCards = (dataAPI) => {
   const [number, setNumber] = useState(0);
   const [conteudo, setConteudo] = useState(null);
 
-  const abrirModalDetails = (name, title, desc, img) => {
-    setConteudo({ name, title, desc, img });
+  const abrirModalDetails = (name, title, desc, img, backdropPath) => {
+    setConteudo({ name, title, desc, img, backdropPath });
   };
 
   function changeSlide() {

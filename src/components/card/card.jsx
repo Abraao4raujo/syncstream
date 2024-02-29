@@ -2,13 +2,13 @@ import "../../styles/card.css";
 
 const Card = ({ movie, abrirModalDetails }) => {
   const image_path = "https://image.tmdb.org/t/p/w500";
-
   const abrirModal = () => {
     scrollTo(0, 0);
     abrirModalDetails(
       movie.name,
       movie.title,
       movie.overview,
+      `https://image.tmdb.org/t/p/original${movie.backdrop_path}`,
       `${image_path}${movie.poster_path}`
     );
   };
@@ -17,6 +17,7 @@ const Card = ({ movie, abrirModalDetails }) => {
     <li className="card" key={movie.id} onClick={abrirModal}>
       <div className="inf-movie">
         <label className="title-movie">{movie.name || movie.title}</label>
+
         <img
           src={`${image_path}${movie.poster_path}`}
           alt={movie.name || movie.title}
