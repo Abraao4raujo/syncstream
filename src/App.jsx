@@ -8,8 +8,10 @@ import NotFound from "./pages/NotFound.jsx";
 import AuthUser from "./pages/AuthUser";
 import { Header } from "./pages/Layout/header/Header.jsx";
 import { Footer } from "./pages/Layout/footer/Footer.jsx";
+import { useState } from "react";
 
 const App = () => {
+  const [menu, setOpenMenu] = useState(false);
   return (
     <div className="App">
       <BrowserRouter>
@@ -19,8 +21,10 @@ const App = () => {
             <Route path="/register" element={<Cadastro />} />
           </Route>
 
-          <Route element={<Layout />}>
-            <Route path="/home" element={<Home />} />
+          <Route
+            element={<Layout optionMenu={menu} setOpenMenu={setOpenMenu} />}
+          >
+            <Route path="/home" element={<Home menu={menu} />} />
             <Route path="/movies" element={<Movies />} />
             <Route path="/series" element={<Series />} />
           </Route>
@@ -31,10 +35,10 @@ const App = () => {
   );
 };
 
-function Layout() {
+function Layout({ optionMenu, setOpenMenu }) {
   return (
     <>
-      <Header />
+      <Header optionMenu={optionMenu} setOpenMenu={setOpenMenu} />
       <Outlet />
       <Footer />
     </>

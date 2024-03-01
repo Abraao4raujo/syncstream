@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
 * {
   padding: 0;
   margin: 0;
@@ -102,4 +102,49 @@
   margin-left: 30px;
   font-size: 1rem;
   font-weight: bold;
+}
+
+.menuList {
+  margin-bottom: 30px;
+  color: #fff;
+}
+
+.menuLists {
+  list-style: none;
+  font-family: "Inter", sans-serif;
+  font-size: 1.3rem;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.menuNav {
+  display: flex;
+  text-align: center;
+}
+
+.menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  height: 50%;
+}
+
+.menuSection {
+  background-color: #333;
+  width: 100%;
+  height: 0%;
+  position: absolute;
+  top: 7%;
+  display: flex;
+  z-index: 1;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  transition: height 2s;
+}
+
+.menuSection.open {
+  height: 100%;
 }

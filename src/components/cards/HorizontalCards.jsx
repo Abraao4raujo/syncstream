@@ -1,37 +1,14 @@
 import Card from "../card/card.jsx";
 import "../../styles/cards.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Details from "../../pages/Details.jsx";
 
 const HorizontalCards = (dataAPI) => {
-  const [number, setNumber] = useState(0);
   const [conteudo, setConteudo] = useState(null);
 
   const abrirModalDetails = (name, title, desc, img, backdropPath) => {
     setConteudo({ name, title, desc, img, backdropPath });
   };
-
-  function changeSlide() {
-    let listaFilmes = document.querySelector(".cards");
-
-    listaFilmes.scrollLeft = 290 * number;
-  }
-
-  function decreaseNumber() {
-    if (number > 0) {
-      setNumber((prevNumber) => prevNumber - 1);
-    }
-  }
-
-  function increaseNumber() {
-    if (number < 15) {
-      setNumber((prevNumber) => prevNumber + 1);
-    }
-  }
-
-  useEffect(() => {
-    changeSlide(number);
-  }, [number]);
 
   return (
     <>

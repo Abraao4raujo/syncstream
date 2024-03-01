@@ -134,7 +134,7 @@ const DivSendMessage = styled.div`
   justify-content: space-between;
 `;
 
-export const Header = () => {
+export const Header = ({ setOpenMenu, optionMenu }) => {
   const [isConnected, setIsConnected] = useState(false);
   const [showRoom, setShowRoom] = useState(false);
   const [nomeSala, setNomeSala] = useState();
@@ -271,7 +271,60 @@ export const Header = () => {
 
   return (
     <HeaderDiv>
-      {/* <Navigation valueSalaCriada={salaCriada} /> */}
+      {optionMenu && (
+        <div className={`menuSection ${optionMenu && "open"}`}>
+          <div className="menu">
+            <nav className="menuNav">
+              <ul className="menuLists">
+                <NavLink
+                  className="menuList"
+                  onClick={() => {
+                    setOpenMenu(false);
+                  }}
+                  to={"/series"}
+                >
+                  SÉRIES
+                </NavLink>
+
+                <NavLink
+                  className="menuList"
+                  onClick={() => {
+                    setOpenMenu(false);
+                  }}
+                  to={"/movies"}
+                >
+                  FILMES
+                </NavLink>
+
+                {isJoinedRoom ? (
+                  <NavLink
+                    className="menuList"
+                    onClick={() => {
+                      setShowRoom(true);
+                      setOpenMenu(false)
+                    }}
+                  >
+                    SALA DE {nomeSala}
+                  </NavLink>
+                ) : (
+                  // nav para procurar salas existentes
+                  <NavLink
+                    className="menuList"
+                    onClick={() => {
+                      setOpenMenu(false)
+                      isConnected
+                        ? setShowSearchRoom(true)
+                        : (window.location.href = "/");
+                    }}
+                  >
+                    SALAS
+                  </NavLink>
+                )}
+              </ul>
+            </nav>
+          </div>
+        </div>
+      )}
       <Nav>
         <NavLink
           className="navLink"
@@ -353,10 +406,11 @@ export const Header = () => {
               padding: "10px",
               cursor: "pointer",
             }}
+            onClick={(e) => setOpenMenu(!optionMenu)}
+            className="menuBtn"
           />
         </OptionMenu>
       </Nav>
-
       {/* MODAL DAS SALAS EXISTENTES */}
       {showSearchRoom && (
         <Modal
