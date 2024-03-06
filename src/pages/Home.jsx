@@ -2,6 +2,7 @@ import "../styles/main.css";
 import HorizontalCards from "../components/cards/HorizontalCards.jsx";
 import useFetch from "../adapters/useFetch.jsx";
 
+
 const Home = () => {
   const data = useFetch(
     `https://api.themoviedb.org/3/movie/popular?api_key=${
@@ -13,6 +14,7 @@ const Home = () => {
 
   return (
     <>
+    
       <div className="containerFilmeDestaque">
         {dataMain && (
           <>
