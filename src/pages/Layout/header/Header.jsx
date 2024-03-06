@@ -1,13 +1,15 @@
 import { NavLink } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { child, get, onValue, ref, set } from "firebase/database";
+import { get, ref, set } from "firebase/database";
 import styled from "styled-components";
 import { database as db, auth } from "../../../adapters/firebaseConfig";
 import Modal from "../../../components/Modal/Modal";
-const dbRef = ref(db);
 import { IoSend } from "react-icons/io5";
 import { RxHamburgerMenu } from "react-icons/rx";
+
+import io from "socket.io-client";
+const socket = io.connect("http://localhost:3001");
 
 const HeaderDiv = styled.div`
   width: 100%;
@@ -67,60 +69,24 @@ const OptionMenu = styled.div`
   }
 `;
 
-const ListsMessage = styled.ul`
-  color: #333;
-  background-color: #d9d9d9;
-  list-style: none;
-  padding: 15px;
-  width: 290px;
-  height: 180px;
+const Message = styled.p`
+  color: #fff;
+  width: 300px;
+  word-wrap: break-word;
+`;
+const DivMessage = styled.div`
   overflow-y: auto;
-`;
-
-const DivReceiver = styled.div`
+  height: 300px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  font-family: arial;
+  text-align: center;
 `;
-
-const DivSender = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  font-family: arial;
-`;
-
-const Sender = styled.li`
-  font-size: 0.8rem;
-  font-weight: bold;
-`;
-
-const MessageSender = styled.li`
-  background-color: #999999;
-  max-width: 150px;
-  margin-left: 30px;
-  padding: 5px;
-  border-radius: 10px 1px 10px 10px;
-  display: flex;
-  margin-bottom: 4px;
-  margin-right: 10px;
-`;
-
-const Receiver = styled.li`
-  font-size: 0.8rem;
-  font-weight: bold;
-`;
-
-const MessageReceiver = styled.div`
-  background-color: #999999;
-  max-width: 150px;
-  margin-left: 10px;
-  margin-bottom: 4px;
-  padding: 5px;
-  border-radius: 1px 10px 10px 10px;
+const FormInput = styled.form`
+  width: 90%;
+  margin-top: 15px;
   display: flex;
 `;
+
 const InputSendMessage = styled.input`
   color: #333;
   padding: 8px;
@@ -137,22 +103,28 @@ const DivSendMessage = styled.div`
 export const Header = ({ setOpenMenu, optionMenu }) => {
   const [isConnected, setIsConnected] = useState(false);
   const [showRoom, setShowRoom] = useState(false);
-  const [nomeSala, setNomeSala] = useState();
-  const [nomeUsuario, setNomeUsuario] = useState();
+  const [nomeUsuario, setNomeUsuario] = useState(); //Dados do usuario que está acessando o site
   const [showSearchRoom, setShowSearchRoom] = useState(false);
-  const [dataRoom, setDataRoom] = useState();
   const [nameRooms, setNameRooms] = useState([]);
   const [isJoinedRoom, setIsJoinedRoom] = useState(false);
-  const [donoSala, setDonoSala] = useState();
   const [message, setMessage] = useState();
-  const [messageSended, setMessageSended] = useState();
-  const [yourMessage, setYourMessage] = useState();
-  const [theirMessages, setTheirMessages] = useState();
-  const [allMessages, setAllMessages] = useState();
+  const [nameRoom, setNameRoom] = useState();
+  const messageRef = useRef();
+  const [messageList, setMessageList] = useState([]);
 
+  useEffect(() => {
+    socket.on("receive_message", (data) => {
+      setMessageList((current) => [...current, data]);
+    });
+
+    return () => socket.off("receive_message");
+  }, [socket]);
+
+  // VERIFIFA SE O USUARIO ESTÁ LOGADO
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
+        setNomeUsuario(user.displayName);
         setIsConnected(true);
       } else {
         setIsConnected(false);
@@ -160,114 +132,70 @@ export const Header = ({ setOpenMenu, optionMenu }) => {
     });
   }, []);
 
-  useEffect(() => {
-    onValue(child(dbRef, `Rooms/`), (snapshot) => {
-      let roomsArray = [];
-      snapshot.forEach((childSnapshot) => {
-        const childKey = childSnapshot.key;
-
-        roomsArray.push(childKey);
-      });
-      setNameRooms(roomsArray);
-    });
-  }, []);
-
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setNomeSala(user.displayName);
-        setNomeUsuario(user.displayName);
-      }
-    });
-  }, []);
-
-  function joinSpecificRoom(nameRoom) {
-    const guestsRef = ref(db, `Rooms/${nameRoom}/guests/`);
-
-    get(guestsRef).then((snapshot) => {
-      const existingUsers = snapshot.val() || [];
-
-      existingUsers.push(nomeSala);
-
-      set(guestsRef, existingUsers)
-        .then(() => {
-          console.log(`${nomeSala} adicionado na sala de ${donoSala}`);
-          setIsJoinedRoom(true);
-          setShowSearchRoom(false);
-          setShowRoom(true);
-          setDataRoom(existingUsers);
-        })
-        .catch((error) =>
-          console.log(`Não foi possivel entrar na sala. Error: ${error}`)
-        );
-    });
+  // ENTRAR EM UMA SALA EXISTENTE
+  function joinRoom(nomeSala) {
+    const joinRoomRef = ref(db, `Rooms/${nomeSala}/members/${nomeUsuario}`);
+    set(joinRoomRef, true)
+      .then(() => {
+        setNameRoom(nomeSala);
+        setIsJoinedRoom(true);
+        setShowRoom(true);
+        setShowSearchRoom(false);
+        socket.emit("set_username", nomeUsuario);
+      })
+      .catch((error) =>
+        console.log("Não foi possivel adicionar o usuário na sala", error)
+      );
+    return joinRoomRef;
   }
 
-  function exitRoom() {
-    const guestsRef = ref(db, `Rooms/${donoSala}/guests/`);
+  // DEIXAR SALA EXISTENTE
+  function leaveRoom() {
+    const leaveRoomRef = ref(db, `Rooms/${nameRoom}/members/${nomeUsuario}`);
 
-    get(guestsRef).then((snapshot) => {
-      const existingUsers = snapshot.val();
-      if (existingUsers) {
-        existingUsers.splice(existingUsers.indexOf(nomeSala), 1);
-      }
+    set(leaveRoomRef, false)
+      .then(() => {
+        setNameRoom("");
+        setIsJoinedRoom(false);
+        setShowRoom(false);
+        setShowSearchRoom(true);
+      })
+      .catch((error) =>
+        console.log(`Não foi possivel deixar a sala. Error: ${error}`)
+      );
 
-      set(guestsRef, existingUsers)
-        .then(() => {
-          console.log(`${nomeSala} removido da sala de ${donoSala}`);
-          setIsJoinedRoom(false);
-          setShowRoom(false);
-          setShowSearchRoom(true);
-        })
-        .catch((error) =>
-          console.log(`Não foi possivel entrar na sala. Error: ${error}`)
-        );
-    });
+    return leaveRoomRef;
   }
 
-  function sendMessage() {
-    const guestsRef = ref(db, `Rooms/${donoSala}/chats/`);
+  // PEGA O NOME DAS SALAS EXISTENTES
+  function getNameRooms() {
+    const getRoomsRef = ref(db, `Rooms/`);
 
-    get(guestsRef).then((snapshot) => {
-      const existingMessage = snapshot.val() || {};
-
-      if (!Array.isArray(existingMessage[nomeUsuario])) {
-        existingMessage[nomeUsuario] = [];
-      }
-
-      existingMessage[nomeUsuario].push(message);
-
-      set(guestsRef, existingMessage)
-        .then(() => {
-          setMessage("");
-        })
-        .catch((error) =>
-          console.log(`Não foi possivel enviar a mensagem. Error: ${error}`)
-        );
+    get(getRoomsRef).then((e) => {
+      setNameRooms(Object.keys(e.val()));
     });
+
+    return getRoomsRef;
   }
 
-  useEffect(() => {
-    const guestsRef = ref(db, `Rooms/${donoSala}/chats/`);
+  // LIDAR COM EVENTOS DE MUDANÇA DO INPUT
+  const handleChange = (e) => {
+    setMessage(e.target.value);
+  };
 
-    get(guestsRef).then((snapshot) => {
-      const existingMessage = snapshot.val() || [];
+  // ENVIA MENSAGEM NA SALA
+  const handleSubmit = () => {
+    const message = messageRef.current.value;
+    if (!message.trim()) return;
+    socket.emit("message", message);
+    clearInput();
+  };
 
-      setAllMessages(existingMessage);
-      Object.entries(existingMessage).map((message) => {
-        setMessageSended(message);
-      });
-    });
-  }, [message]);
-
-  useEffect(() => {
-    const guestsRef = ref(db, `Rooms/${donoSala}/chats/${nomeUsuario}`);
-
-    get(guestsRef).then((snapshot) => {
-      const existingMessage = snapshot.val() || [];
-      setYourMessage(Object.values(existingMessage));
-    });
-  }, [message]);
+  // LIMPA O INPUT
+  const clearInput = () => {
+    console.log(messageRef);
+    messageRef.current.value = "";
+  };
 
   return (
     <HeaderDiv>
@@ -301,7 +229,7 @@ export const Header = ({ setOpenMenu, optionMenu }) => {
                     className="menuList"
                     onClick={() => {
                       setShowRoom(true);
-                      setOpenMenu(false)
+                      setOpenMenu(false);
                     }}
                   >
                     SALA DE {nomeSala}
@@ -311,7 +239,7 @@ export const Header = ({ setOpenMenu, optionMenu }) => {
                   <NavLink
                     className="menuList"
                     onClick={() => {
-                      setOpenMenu(false)
+                      setOpenMenu(false);
                       isConnected
                         ? setShowSearchRoom(true)
                         : (window.location.href = "/");
@@ -369,13 +297,14 @@ export const Header = ({ setOpenMenu, optionMenu }) => {
                 setShowRoom(true);
               }}
             >
-              SALA DE {nomeSala}
+              SALA DE {nameRoom}
             </NavLink>
           ) : (
             // nav para procurar salas existentes
             <NavLink
               className="navLink"
               onClick={() => {
+                getNameRooms();
                 isConnected
                   ? setShowSearchRoom(true)
                   : (window.location.href = "/");
@@ -411,6 +340,7 @@ export const Header = ({ setOpenMenu, optionMenu }) => {
           />
         </OptionMenu>
       </Nav>
+      
       {/* MODAL DAS SALAS EXISTENTES */}
       {showSearchRoom && (
         <Modal
@@ -429,8 +359,7 @@ export const Header = ({ setOpenMenu, optionMenu }) => {
                   <ListUser
                     key={index}
                     onClick={() => {
-                      setDonoSala(key);
-                      joinSpecificRoom(key);
+                      joinRoom(key);
                     }}
                   >
                     Sala de {key}
@@ -453,63 +382,46 @@ export const Header = ({ setOpenMenu, optionMenu }) => {
       {/* MODAL DE QUANDO O USUARIO ENTRAR EM UMA SALA */}
       {showRoom && (
         <Modal
-          header={`Sala de ${donoSala}`}
+          header={`Sala de ${nameRoom}`}
           main={
-            <div>
-              <ListsMessage>
-                {Object.entries(allMessages).map(([user, messages]) => (
-                  <React.Fragment key={user}>
-                    {user === nomeUsuario ? (
-                      messages.map((msg, index) => (
-                        <DivSender key={index}>
-                          <Sender>You</Sender>
-                          <MessageSender key={index}>{msg}</MessageSender>
-                        </DivSender>
-                      ))
-                    ) : (
-                      <DivReceiver>
-                        <Receiver>{user}</Receiver>
-                        {messages.map((msg, index) => (
-                          <MessageReceiver key={index}>{msg}</MessageReceiver>
-                        ))}
-                      </DivReceiver>
-                    )}
-                  </React.Fragment>
+            <>
+              <DivMessage>
+                {messageList.map((message, index) => (
+                  <Message key={index}>
+                    {message.author}: {message.text}
+                  </Message>
                 ))}
-              </ListsMessage>
-              <DivSendMessage>
-                <InputSendMessage
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                />
-                <IoSend
-                  style={{
-                    color: "#fff",
-                    fontSize: "1.4rem",
-                    background: "blue",
-                    width: "34px",
-                    height: "31px",
-                    borderRadius: "0px 0px 10px 0px",
-                    cursor: "pointer",
-                  }}
-                  onClick={sendMessage}
-                />
-              </DivSendMessage>
-            </div>
+              </DivMessage>
+              <FormInput
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleSubmit();
+                }}
+              >
+                <DivSendMessage>
+                  <InputSendMessage
+                    value={messageRef.current && messageRef.current.value}
+                    ref={messageRef}
+                    onChange={handleChange}
+                  />
+                  <IoSend
+                    style={{
+                      color: "rgb(255, 255, 255)",
+                      fontSize: "1.4rem",
+                      width: "31px",
+                      marginLeft: "10px",
+                      height: "100%",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => handleSubmit()}
+                  />
+                </DivSendMessage>
+              </FormInput>
+            </>
           }
-          footer={<Label onClick={exitRoom}>Sair da sala</Label>}
+          footer={<Label onClick={leaveRoom}>Sair da sala</Label>}
         />
       )}
     </HeaderDiv>
   );
 };
-
-// FUNCIONALIDADE QUE MOSTRA OS USUARIOS ONLINES
-// {dataRoom.map((key, index) => (
-//                 <li
-//                   key={index}
-//                   style={{ fontFamily: "Arial", fontWeight: "bold" }}
-//                 >
-//                   {key}
-//                 </li>
-//               ))}

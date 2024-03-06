@@ -148,3 +148,8 @@
 .menuSection.open {
   height: 100%;
 }
+
+.cursorMouse {
+  position: absolute;
+  color: #000;
+}
