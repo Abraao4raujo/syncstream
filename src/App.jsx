@@ -13,10 +13,10 @@ import { useState } from "react";
 const App = () => {
   const [menu, setOpenMenu] = useState(false);
   return (
-    <div className="App">
+    <div className="App bg-[#333]">
       <BrowserRouter>
         <Routes>
-          <Route element={<Auth />}>
+          <Route element={<AuthUser />}>
             <Route path="/" element={<Login />} />
             <Route path="/register" element={<Cadastro />} />
           </Route>
@@ -41,15 +41,6 @@ function Layout({ optionMenu, setOpenMenu }) {
       <Header optionMenu={optionMenu} setOpenMenu={setOpenMenu} />
       <Outlet />
       <Footer />
-    </>
-  );
-}
-function Auth() {
-  return (
-    <>
-      <AuthUser>
-        <Outlet />
-      </AuthUser>
     </>
   );
 }

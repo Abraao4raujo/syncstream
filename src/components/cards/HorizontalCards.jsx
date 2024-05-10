@@ -1,30 +1,58 @@
-import Card from "../card/card.jsx";
 import "../../styles/cards.css";
-import { useState } from "react";
-import Details from "../../pages/Details.jsx";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import useFetch from "../../adapters/useFetch.jsx";
 
-const HorizontalCards = (dataAPI) => {
-  const [conteudo, setConteudo] = useState(null);
+const HorizontalCards = ({ format, page }) => {
+  let formats = "movie";
 
-  const abrirModalDetails = (name, title, desc, img, backdropPath) => {
-    setConteudo({ name, title, desc, img, backdropPath });
-  };
+  if (format) {
+    formats = format;
+  }
+
+  const dataMoviesAndSeries = useFetch(
+    `https://api.themoviedb.org/3/${formats}/popular?api_key=${
+      import.meta.env.VITE_APIKEYTMDB
+    }&language=pt-BR&page=${page || 1}`
+  );
 
   return (
-    <>
-      {conteudo && <Details infApi={conteudo} setConteudo={setConteudo} />}
-      <div className="container-cards">
-        <ul className="cards">
-          {dataAPI.dataAPI.map((item, index) => (
-            <Card
-              movie={item}
-              key={index}
-              abrirModalDetails={abrirModalDetails}
-            />
-          ))}
-        </ul>
+    <div className="container-cards ">
+      <div className="mt-[80px] grid grid-cols-5 gap-[15px]">
+        {dataMoviesAndSeries.map((item, index) => (
+          <AlertDialog key={index}>
+            <AlertDialogTrigger>
+              <img
+                className="w-full h-[350px] bg-cover"
+                src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
+              />
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>{item.title}</AlertDialogTitle>
+                <img
+                  className="w-full h-[550px] bg-cover"
+                  src={`https://image.tmdb.org/t/p/original${item.poster_path}`}
+                />
+                <AlertDialogDescription>{item.overview}</AlertDialogDescription>
+              </AlertDialogHeader>
+
+              <AlertDialogFooter>
+                <AlertDialogCancel>Fechar</AlertDialogCancel>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        ))}
       </div>
-    </>
+    </div>
   );
 };
 

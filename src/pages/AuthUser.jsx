@@ -20,6 +20,7 @@ const BgImage = styled.img`
   object-fit: cover;
   width: 100%;
 `;
+
 const AuthUser = () => {
   return (
     <div>

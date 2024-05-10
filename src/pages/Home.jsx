@@ -1,35 +1,47 @@
 import "../styles/main.css";
-import HorizontalCards from "../components/cards/HorizontalCards.jsx";
 import useFetch from "../adapters/useFetch.jsx";
-
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
+import HorizontalCards from "../components/cards/HorizontalCards.jsx";
 
 const Home = () => {
   const data = useFetch(
     `https://api.themoviedb.org/3/movie/popular?api_key=${
-      import.meta.env.VITE_API_KEY
+      import.meta.env.VITE_APIKEYTMDB
     }&language=pt-BR&page=1`
   );
 
-  let dataMain = data[0];
-
   return (
     <>
-    
-      <div className="containerFilmeDestaque">
-        {dataMain && (
-          <>
-            <img
-              src={
-                "https://image.tmdb.org/t/p/original/" + dataMain.backdrop_path
-              }
-            />
-            <h2>{dataMain.title}</h2>
-          </>
-        )}
-      </div>
-      <div className="main-movie">
-        <HorizontalCards dataAPI={data} />
-      </div>
+      {data && (
+        <Carousel
+          className="w-[1340px] h-[70vh p-0] m-auto"
+          plugins={[
+            Autoplay({
+              delay: 2500,
+            }),
+          ]}
+        >
+          <CarouselContent className="w-full h-[70vh] m-auto">
+            {data.map((filmes, index) => (
+              <CarouselItem className="p-0 w-full h-full" key={index}>
+                <img
+                  className="w-full h-full bg-cover"
+                  src={
+                    "https://image.tmdb.org/t/p/original/" +
+                    filmes.backdrop_path
+                  }
+                />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+      )}
+      <HorizontalCards />
     </>
   );
 };

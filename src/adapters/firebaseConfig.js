@@ -3,14 +3,14 @@ import { getAuth } from "firebase/auth";
 import { getDatabase } from "firebase/database";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDMsmozeY1ybThnEjAJJzFRvjeCLI-Br9E",
-  authDomain: "syncstream-285bb.firebaseapp.com",
-  projectId: "syncstream-285bb",
-  storageBucket: "syncstream-285bb.appspot.com",
-  messagingSenderId: "638889967854",
-  appId: "1:638889967854:web:88b6676b15ef861be273ff",
-  measurementId: "G-Z71ED8M4WF",
-  databaseURL: `https://${import.meta.env.VITE_DATABASE_NAME}.firebaseio.com`,
+  apiKey: import.meta.env.VITE_apiKey,
+  authDomain: import.meta.env.VITE_authDomain,
+  databaseURL: import.meta.env.VITE_databaseURL,
+  projectId: import.meta.env.VITE_projectId,
+  storageBucket: import.meta.env.VITE_storageBucket,
+  messagingSenderId: import.meta.env.VITE_messagingSenderId,
+  appId: import.meta.env.VITE_appId,
+  measurementId: import.meta.env.VITE_measurementId,
 };
 
 const app = initializeApp(firebaseConfig);
