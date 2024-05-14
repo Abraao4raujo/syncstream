@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import styled from "styled-components";
-import { auth } from "../../../adapters/firebaseConfig";
+import { auth } from "../../adapters/firebaseConfig";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -60,7 +60,7 @@ export const Header = ({ setOpenMenu, optionMenu }) => {
   }, []);
 
   return (
-    <HeaderDiv className="absolute z-10">
+    <HeaderDiv className=" z-10">
       {optionMenu && (
         <div className={`menuSection ${optionMenu && "open"}`}>
           <div className="menu">

@@ -1,7 +1,7 @@
-import "../styles/paginaAutenticacao.css";
+import "../style.css";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { auth } from "../adapters/firebaseConfig";
+import { auth } from "../../../adapters/firebaseConfig";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
 const Cadastro = () => {
@@ -24,7 +24,7 @@ const Cadastro = () => {
   }
 
   return (
-    <div className="modal-container">
+    <div className="modal-container z-10">
       <h1 className="modal-title">Cadastro</h1>
       <form
         onSubmit={(e) => {

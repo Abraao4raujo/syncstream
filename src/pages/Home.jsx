@@ -6,7 +6,7 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
-import HorizontalCards from "../components/cards/HorizontalCards.jsx";
+import HorizontalCards from "../components/containerCards/HorizontalCards.jsx";
 
 const Home = () => {
   const data = useFetch(

@@ -18,7 +18,7 @@ const HorizontalCards = ({ format, page }) => {
     formats = format;
   }
 
-  const dataMoviesAndSeries = useFetch(
+  const movies = useFetch(
     `https://api.themoviedb.org/3/${formats}/popular?api_key=${
       import.meta.env.VITE_APIKEYTMDB
     }&language=pt-BR&page=${page || 1}`
@@ -27,11 +27,11 @@ const HorizontalCards = ({ format, page }) => {
   return (
     <div className="container-cards ">
       <div className="mt-[80px] grid grid-cols-5 gap-[15px]">
-        {dataMoviesAndSeries.map((item, index) => (
+        {movies.map((item, index) => (
           <AlertDialog key={index}>
             <AlertDialogTrigger>
               <img
-                className="w-full h-[350px] bg-cover"
+                className="min-w-[250px] max-w-[250px] h-[350px] bg-cover"
                 src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
               />
             </AlertDialogTrigger>

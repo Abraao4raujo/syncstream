@@ -1,4 +1,4 @@
-import "../styles/paginaAutenticacao.css";
+import "../style.css";
 import { Link } from "react-router-dom";
 import {
   signInWithPopup,
@@ -6,7 +6,8 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
 } from "firebase/auth";
-import { auth } from "../adapters/firebaseConfig";
+import { auth } from "../../../adapters/firebaseConfig";
+
 import { useEffect, useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 
@@ -58,7 +59,7 @@ const Login = () => {
   }
 
   return (
-    <div className="modal-container">
+    <div className="modal-container z-10">
       <h1 className="modal-title">Login</h1>
       <form
         onSubmit={(e) => {
