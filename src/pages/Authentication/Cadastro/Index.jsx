@@ -1,19 +1,19 @@
 import "../style.css";
 import { Link } from "react-router-dom";
-import { useState } from "react";
 import { auth } from "../../../adapters/firebaseConfig";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
 const Cadastro = () => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
   // cadastrar usuario
-  function handleRegister(username, email, password) {
+  const handleRegister = (e) => {
+    e.preventDefault();
+    let displayname = e.target[0].value;
+    let email = e.target[1].value;
+    let password = e.target[2].value;
+
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
-        await updateProfile(userCredential.user, { displayName: username });
+        await updateProfile(userCredential.user, { displayName: displayname });
         window.location.href = "/home";
       })
       .catch((error) => {
@@ -21,37 +21,29 @@ const Cadastro = () => {
         console.log(errorMessage);
         alert("Não foi possivel cadastrar o usuário");
       });
-  }
+  };
 
   return (
     <div className="modal-container z-10">
       <h1 className="modal-title">Cadastro</h1>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleRegister(username, email, password);
-        }}
-      >
+      <form onSubmit={handleRegister}>
         <h2 className="title_input">Nome</h2>
         <input
           className="modal-input"
           type="text"
           placeholder="Digite seu nome"
-          onChange={({ target }) => setUsername(target.value)}
         />
         <h2 className="title_input">Email</h2>
         <input
           className="modal-input"
           type="email"
           placeholder="Digite seu email"
-          onChange={({ target }) => setEmail(target.value)}
         />
         <h2 className="title_input">Senha</h2>
         <input
           className="modal-input"
           type="password"
           placeholder="*********"
-          onChange={({ target }) => setPassword(target.value)}
         />
         <div className="options-login">
           <input type="submit" value="Cadastrar" className="modal-button" />

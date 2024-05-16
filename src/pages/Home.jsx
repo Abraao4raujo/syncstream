@@ -1,47 +1,42 @@
 import "../styles/main.css";
-import useFetch from "../adapters/useFetch.jsx";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
-import HorizontalCards from "../components/containerCards/HorizontalCards.jsx";
+import SlidesCard from "../components/containerCards/slidesCard.jsx";
 
-const Home = () => {
-  const data = useFetch(
-    `https://api.themoviedb.org/3/movie/popular?api_key=${
-      import.meta.env.VITE_APIKEYTMDB
-    }&language=pt-BR&page=1`
-  );
-
+const Home = ({ movies }) => {
   return (
     <>
-      {data && (
+      {movies && (
         <Carousel
-          className="w-[1340px] h-[70vh p-0] m-auto"
+          className="w-full h-full m-auto"
           plugins={[
             Autoplay({
-              delay: 2500,
+              delay: 4500,
             }),
           ]}
         >
-          <CarouselContent className="w-full h-[70vh] m-auto">
-            {data.map((filmes, index) => (
-              <CarouselItem className="p-0 w-full h-full" key={index}>
+          <CarouselContent className="w-full h-full m-auto">
+            {movies.map((movie, key) => (
+              <CarouselItem className="p-0 w-full h-full" key={key}>
                 <img
                   className="w-full h-full bg-cover"
                   src={
-                    "https://image.tmdb.org/t/p/original/" +
-                    filmes.backdrop_path
+                    "https://image.tmdb.org/t/p/original/" + movie.backdrop_path
                   }
                 />
+                <label className="relative bottom-[10vh] left-[150px] text-[3rem] text-white">
+                  {movie.title || movie.name}
+                </label>
               </CarouselItem>
             ))}
           </CarouselContent>
         </Carousel>
       )}
-      <HorizontalCards />
+      <SlidesCard movies={movies} />
     </>
   );
 };
