@@ -5,7 +5,7 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
-import SlidesCard from "../components/containerCards/slidesCard.jsx";
+import SlidesCard from "../components/containerCards/SlidesCard.jsx";
 
 const Home = ({ movies }) => {
   return (
