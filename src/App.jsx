@@ -7,6 +7,8 @@ import { Header } from "./components/Header/Index.jsx";
 import { Footer } from "./components/Footer/Index.jsx";
 import BgImageSrc from "../public/capaFilmes.png";
 import useFetch from "./adapters/useFetch.jsx";
+import Movie from "./pages/Movie.jsx";
+import TvShows from "./pages/TvShows.jsx";
 
 const App = () => {
   const movies = useFetch(
@@ -35,9 +37,23 @@ const App = () => {
           </Route>
 
           <Route element={<Layout />}>
-            <Route path="/home" element={<Home movies={movies} />} />
-            <Route path="/movies" element={<Home movies={moviesTwo} />} />
-            <Route path="/series" element={<Home movies={tvShows} />} />
+            <Route
+              path="/home"
+              element={<Home movies={movies} path={"movie"} />}
+            />
+            <Route
+              path="/movie"
+              element={<Home movies={moviesTwo} path={"movie"} />}
+            />
+            <Route
+              path="/series"
+              element={<Home movies={tvShows} path={"tv"} />}
+            />
+            <Route
+              path="/movie/:id"
+              element={<Movie movies={movies} path={"movie"} />}
+            />
+            <Route path="/tv/:id" element={<TvShows series={tvShows} />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

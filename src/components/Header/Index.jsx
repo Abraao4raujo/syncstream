@@ -42,7 +42,7 @@ export const Header = () => {
   }, []);
 
   return (
-    <HeaderDiv className="z-10 absolute">
+    <HeaderDiv className="z-10 fixed">
       <Nav className="justify-between px-10">
         <div className="flex items-center">
           <NavLink
@@ -65,7 +65,7 @@ export const Header = () => {
           </NavLink>
           <NavLink
             className="text-1xl text-white font-medium capitalize ml-10"
-            to={user.online ? "/movies" : "/"}
+            to={user.online ? "/movie" : "/"}
             style={({ isActive }) => {
               return {
                 fontWeight: isActive ? "bold" : "500",
